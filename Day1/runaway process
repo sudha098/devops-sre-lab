@@ -1,0 +1,18 @@
+controlplane ~ ➜  yes > /dev/null &
+[1] 58260
+
+controlplane ~ ✦ ➜  top | grep yes
+  58260 root      20   0    6088   1028    936 R 100.0   0.0   0:04.76 yes                                           
+  58260 root      20   0    6088   1028    936 R 100.0   0.0   0:06.65 yes                                           
+bad data in /proc/uptime
+bad data in /proc/uptime
+bad data in /proc/uptime
+bad data in /proc/uptime
+
+
+controlplane ~ ✦ ✖ kill 58260
+[1]+  Terminated              yes > /dev/null
+
+controlplane ~ ✦ ➜  
+
+controlplane ~ ➜  
