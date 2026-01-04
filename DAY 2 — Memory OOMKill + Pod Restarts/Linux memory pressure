@@ -1,0 +1,114 @@
+controlplane ~ ➜  free -hm
+               total        used        free      shared  buff/cache   available
+Mem:            62Gi        17Gi       2.3Gi       649Mi        42Gi        43Gi
+Swap:             0B          0B          0B
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  vmstat
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 3  0      0 2483216 5277128 39455012    0    0   896   380    0    1  7  8 82  3  0
+
+controlplane ~ ➜  
+
+controlplane ~ ✖ stress --vm 1 --vm-bytes 500M
+-bash: stress: command not found
+
+controlplane ~ ✖ apt install stress
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+E: Unable to locate package stress
+
+controlplane ~ ✖ apt update
+Get:2 https://download.docker.com/linux/ubuntu jammy InRelease [48.5 kB]                                        
+Get:1 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.34/deb  InRelease [1,227 B]   
+Get:3 https://download.docker.com/linux/ubuntu jammy/stable amd64 Packages [80.1 kB]                                
+Get:4 http://security.ubuntu.com/ubuntu jammy-security InRelease [129 kB]                                  
+Get:5 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.34/deb  Packages [6,868 B]
+Get:6 http://archive.ubuntu.com/ubuntu jammy InRelease [270 kB]                 
+Get:7 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [6,205 kB]
+Get:8 http://archive.ubuntu.com/ubuntu jammy-updates InRelease [128 kB]
+Get:9 http://archive.ubuntu.com/ubuntu jammy-backports InRelease [127 kB]
+Get:10 http://archive.ubuntu.com/ubuntu jammy/multiverse amd64 Packages [266 kB]
+Get:11 http://archive.ubuntu.com/ubuntu jammy/universe amd64 Packages [17.5 MB]
+Get:12 http://security.ubuntu.com/ubuntu jammy-security/multiverse amd64 Packages [60.9 kB]
+Get:13 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1,287 kB]  
+Get:14 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [3,633 kB]      
+Get:15 http://archive.ubuntu.com/ubuntu jammy/restricted amd64 Packages [164 kB]            
+Get:16 http://archive.ubuntu.com/ubuntu jammy/main amd64 Packages [1,792 kB]
+Get:17 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1,598 kB]
+Get:18 http://archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [6,411 kB]
+Get:19 http://archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 Packages [69.2 kB]
+Get:20 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [3,966 kB]
+Get:21 http://archive.ubuntu.com/ubuntu jammy-backports/main amd64 Packages [83.9 kB]
+Get:22 http://archive.ubuntu.com/ubuntu jammy-backports/universe amd64 Packages [37.2 kB]
+Fetched 43.8 MB in 6s (7,063 kB/s)                                                                                  
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+44 packages can be upgraded. Run 'apt list --upgradable' to see them.
+
+controlplane ~ ➜  apt install stress-ng -y
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  libipsec-mb1 libjudydebian1 libsctp1
+Suggested packages:
+  lksctp-tools
+The following NEW packages will be installed:
+  libipsec-mb1 libjudydebian1 libsctp1 stress-ng
+0 upgraded, 4 newly installed, 0 to remove and 44 not upgraded.
+Need to get 3,037 kB of archives.
+After this operation, 16.5 MB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libipsec-mb1 amd64 1.2-1 [826 kB]
+Get:2 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libjudydebian1 amd64 1.0.5-5 [94.6 kB]
+Get:3 http://archive.ubuntu.com/ubuntu jammy/main amd64 libsctp1 amd64 1.0.19+dfsg-1build1 [9,370 B]
+Get:4 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 stress-ng amd64 0.13.12-2ubuntu1 [2,107 kB]
+Fetched 3,037 kB in 0s (6,103 kB/s)  
+debconf: delaying package configuration, since apt-utils is not installed
+Selecting previously unselected package libipsec-mb1.
+(Reading database ... 20567 files and directories currently installed.)
+Preparing to unpack .../libipsec-mb1_1.2-1_amd64.deb ...
+Unpacking libipsec-mb1 (1.2-1) ...
+Selecting previously unselected package libjudydebian1.
+Preparing to unpack .../libjudydebian1_1.0.5-5_amd64.deb ...
+Unpacking libjudydebian1 (1.0.5-5) ...
+Selecting previously unselected package libsctp1:amd64.
+Preparing to unpack .../libsctp1_1.0.19+dfsg-1build1_amd64.deb ...
+Unpacking libsctp1:amd64 (1.0.19+dfsg-1build1) ...
+Selecting previously unselected package stress-ng.
+Preparing to unpack .../stress-ng_0.13.12-2ubuntu1_amd64.deb ...
+Unpacking stress-ng (0.13.12-2ubuntu1) ...
+Setting up libjudydebian1 (1.0.5-5) ...
+Setting up libipsec-mb1 (1.2-1) ...
+Setting up libsctp1:amd64 (1.0.19+dfsg-1build1) ...
+Setting up stress-ng (0.13.12-2ubuntu1) ...
+Processing triggers for man-db (2.10.2-1) ...
+Processing triggers for libc-bin (2.35-0ubuntu3.10) ...
+
+controlplane ~ ✖ stress-ng --vm 1 --vm-bytes 500M --vm-keep --timeout 60s
+stress-ng: info:  [73308] setting to a 60 second run per stressor
+stress-ng: info:  [73308] dispatching hogs: 1 vm
+stress-ng: info:  [73308] successful run completed in 60.05s (1 min, 0.05 secs)
+
+controlplane ~ ➜  stress-ng --vm 1 --vm-bytes 500M
+stress-ng: info:  [74429] defaulting to a 86400 second (1 day, 0.00 secs) run per stressor
+stress-ng: info:  [74429] dispatching hogs: 1 vm
+^Cstress-ng: info:  [74429] successful run completed in 53.00s
+
+controlplane ~ ➜  free -mh
+               total        used        free      shared  buff/cache   available
+Mem:            62Gi        18Gi       3.3Gi       637Mi        41Gi        43Gi
+Swap:             0B          0B          0B
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  vmstat
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 7  0      0 3414632 5309396 38237080    0    0   896   380    1    1  7  8 82  3  0
+
+controlplane ~ ➜  
