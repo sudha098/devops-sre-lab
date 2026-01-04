@@ -1,0 +1,180 @@
+
+controlplane ~ ✖ kubectl run cpu-hog --image=polinux/stress -- stress --cpu 2
+pod/cpu-hog created
+
+controlplane ~ ➜  k get po
+NAME      READY   STATUS    RESTARTS   AGE
+cpu-hog   1/1     Running   0          13s
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  k top po
+error: Metrics API not available
+
+controlplane ~ ✖ kubectl describe pod cpu-hog
+Name:             cpu-hog
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             node02/192.168.102.145
+Start Time:       Sun, 04 Jan 2026 09:28:46 +0000
+Labels:           run=cpu-hog
+Annotations:      cni.projectcalico.org/containerID: 75d58b141aa46903888f0e9ac1a5660b4a67809a4ca2a146bf394cbb18aad093
+                  cni.projectcalico.org/podIP: 172.17.2.2/32
+                  cni.projectcalico.org/podIPs: 172.17.2.2/32
+Status:           Running
+IP:               172.17.2.2
+IPs:
+  IP:  172.17.2.2
+Containers:
+  cpu-hog:
+    Container ID:  containerd://8806273c4db8fb990881970919f4ee9e0edf3aea45740e9bf82c9ffc52f5f2b4
+    Image:         polinux/stress
+    Image ID:      docker.io/polinux/stress@sha256:b6144f84f9c15dac80deb48d3a646b55c7043ab1d83ea0a697c09097aaad21aa
+    Port:          <none>
+    Host Port:     <none>
+    Args:
+      stress
+      --cpu
+      2
+    State:          Running
+      Started:      Sun, 04 Jan 2026 09:28:48 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-m2lm6 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-m2lm6:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  30s   default-scheduler  Successfully assigned default/cpu-hog to node02
+  Normal  Pulling    29s   kubelet            Pulling image "polinux/stress"
+  Normal  Pulled     29s   kubelet            Successfully pulled image "polinux/stress" in 960ms (960ms including waiting). Image size: 4041495 bytes.
+  Normal  Created    28s   kubelet            Created container: cpu-hog
+  Normal  Started    28s   kubelet            Started container cpu-hog
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  kubectl top pod cpu-hog
+error: Metrics API not available
+
+controlplane ~ ✖ 
+
+controlplane ~ ✖ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+serviceaccount/metrics-server created
+clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created
+clusterrole.rbac.authorization.k8s.io/system:metrics-server created
+rolebinding.rbac.authorization.k8s.io/metrics-server-auth-reader created
+clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator created
+clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server created
+service/metrics-server created
+deployment.apps/metrics-server created
+apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created
+
+controlplane ~ ➜  kubectl top pod cpu-hog
+error: Metrics API not available
+
+controlplane ~ ✖ kubectl edit deployment metrics-server -n kube-system
+deployment.apps/metrics-server edited
+
+controlplane ~ ➜  kubectl rollout restart deployment metrics-server -n kube-system
+deployment.apps/metrics-server restarted
+
+controlplane ~ ➜  kubectl top pod cpu-hog
+error: Metrics API not available
+
+controlplane ~ ✖ k get po 
+NAME      READY   STATUS    RESTARTS   AGE
+cpu-hog   1/1     Running   0          4m1s
+
+controlplane ~ ➜  k get po - A
+Error from server (NotFound): pods "-" not found
+Error from server (NotFound): pods "A" not found
+
+controlplane ~ ✖ k get po -A
+NAMESPACE     NAME                                       READY   STATUS    RESTARTS   AGE
+default       cpu-hog                                    1/1     Running   0          4m10s
+kube-system   calico-kube-controllers-587f6db6c5-b2qkl   1/1     Running   0          78m
+kube-system   canal-6mv7p                                2/2     Running   0          77m
+kube-system   canal-f7z4x                                2/2     Running   0          77m
+kube-system   canal-rj5k5                                2/2     Running   0          78m
+kube-system   coredns-6678bcd974-74jt6                   1/1     Running   0          78m
+kube-system   coredns-6678bcd974-nbwc5                   1/1     Running   0          78m
+kube-system   etcd-controlplane                          1/1     Running   0          78m
+kube-system   kube-apiserver-controlplane                1/1     Running   0          78m
+kube-system   kube-controller-manager-controlplane       1/1     Running   0          78m
+kube-system   kube-proxy-55xs6                           1/1     Running   0          78m
+kube-system   kube-proxy-6c6kc                           1/1     Running   0          77m
+kube-system   kube-proxy-fcq7l                           1/1     Running   0          77m
+kube-system   kube-scheduler-controlplane                1/1     Running   0          78m
+kube-system   metrics-server-576c8c997c-ltf5j            1/1     Running   0          36s
+kube-system   metrics-server-58cfdf6b7b-428b6            0/1     Running   0          18s
+
+controlplane ~ ➜  k get po -A
+NAMESPACE     NAME                                       READY   STATUS        RESTARTS   AGE
+default       cpu-hog                                    1/1     Running       0          4m17s
+kube-system   calico-kube-controllers-587f6db6c5-b2qkl   1/1     Running       0          78m
+kube-system   canal-6mv7p                                2/2     Running       0          77m
+kube-system   canal-f7z4x                                2/2     Running       0          77m
+kube-system   canal-rj5k5                                2/2     Running       0          78m
+kube-system   coredns-6678bcd974-74jt6                   1/1     Running       0          78m
+kube-system   coredns-6678bcd974-nbwc5                   1/1     Running       0          78m
+kube-system   etcd-controlplane                          1/1     Running       0          78m
+kube-system   kube-apiserver-controlplane                1/1     Running       0          78m
+kube-system   kube-controller-manager-controlplane       1/1     Running       0          78m
+kube-system   kube-proxy-55xs6                           1/1     Running       0          78m
+kube-system   kube-proxy-6c6kc                           1/1     Running       0          77m
+kube-system   kube-proxy-fcq7l                           1/1     Running       0          77m
+kube-system   kube-scheduler-controlplane                1/1     Running       0          78m
+kube-system   metrics-server-576c8c997c-ltf5j            1/1     Terminating   0          43s
+kube-system   metrics-server-58cfdf6b7b-428b6            1/1     Running       0          25s
+
+controlplane ~ ➜  k get po -A
+NAMESPACE     NAME                                       READY   STATUS    RESTARTS   AGE
+default       cpu-hog                                    1/1     Running   0          4m20s
+kube-system   calico-kube-controllers-587f6db6c5-b2qkl   1/1     Running   0          78m
+kube-system   canal-6mv7p                                2/2     Running   0          77m
+kube-system   canal-f7z4x                                2/2     Running   0          77m
+kube-system   canal-rj5k5                                2/2     Running   0          78m
+kube-system   coredns-6678bcd974-74jt6                   1/1     Running   0          78m
+kube-system   coredns-6678bcd974-nbwc5                   1/1     Running   0          78m
+kube-system   etcd-controlplane                          1/1     Running   0          78m
+kube-system   kube-apiserver-controlplane                1/1     Running   0          78m
+kube-system   kube-controller-manager-controlplane       1/1     Running   0          78m
+kube-system   kube-proxy-55xs6                           1/1     Running   0          78m
+kube-system   kube-proxy-6c6kc                           1/1     Running   0          77m
+kube-system   kube-proxy-fcq7l                           1/1     Running   0          77m
+kube-system   kube-scheduler-controlplane                1/1     Running   0          78m
+kube-system   metrics-server-58cfdf6b7b-428b6            1/1     Running   0          28s
+
+controlplane ~ ➜  kubectl top pod cpu-hog
+NAME      CPU(cores)   MEMORY(bytes)   
+cpu-hog   712m         0Mi             
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  k top no
+NAME           CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)   
+controlplane   294m         1%       1119Mi          1%          
+node01         70m          0%       505Mi           0%          
+node02         800m         5%       481Mi           0%          
+
+controlplane ~ ➜  
