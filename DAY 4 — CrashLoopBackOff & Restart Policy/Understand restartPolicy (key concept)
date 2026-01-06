@@ -1,0 +1,13 @@
+controlplane ~ ➜  kubectl get pod crashy -o yaml | grep restartPolicy
+  restartPolicy: Always
+
+controlplane ~ ➜  
+-----------------------------------------------------------------------
+
+| restartPolicy | Behavior                      |
+| ------------- | ----------------------------- |
+| Always        | Restart forever (Deployments) |
+| OnFailure     | Restart only on non-zero exit |
+| Never         | Run once and stop             |
+
+👉 Pods default to Always.
