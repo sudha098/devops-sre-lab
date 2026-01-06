@@ -45,3 +45,16 @@ controlplane ~ ✖ k describe po bad-liveness | tail -5
   Normal   Pulled     0s (x2 over 40s)   kubelet            Successfully pulled image "nginx" in 161ms (161ms including waiting). Image size: 59797235 bytes.
 
 controlplane ~ ➜  
+
+
+----------------------------------------------------------------------------------
+
+Understand why it restarted:
+
+kubectl describe pod bad-liveness
+Look for:
+Liveness probe failed
+Container restarted
+
+👉 CPU & memory are fine
+👉 Restart happened due to probe
