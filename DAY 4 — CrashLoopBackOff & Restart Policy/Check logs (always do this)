@@ -1,0 +1,20 @@
+
+controlplane ~ ✖ k logs crashy 
+
+controlplane ~ ➜  k logs crashy 
+
+controlplane ~ ➜  
+
+------------------------
+
+Observation:
+Very little or no logs
+
+Process exited immediately
+
+👉 In real life this often means:
+
+Wrong command
+Missing env variable
+Bad config
+
