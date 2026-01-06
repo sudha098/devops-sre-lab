@@ -1,0 +1,71 @@
+controlplane ~ ➜  cat <<EOF > readiness.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: readiness-demo
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    readinessProbe:
+      httpGet:
+        path: /
+        port: 80
+      initialDelaySeconds: 5
+      periodSeconds: 5
+EOF
+
+controlplane ~ ➜  k apply -f readiness.yaml 
+pod/readiness-demo created
+
+controlplane ~ ➜  k get po readiness-demo -w
+NAME             READY   STATUS    RESTARTS   AGE
+readiness-demo   0/1     Running   0          7s
+readiness-demo   1/1     Running   0          9s
+^C
+controlplane ~ ✖ vi readiness.yaml 
+
+controlplane ~ ➜  k apply -f readiness.yaml 
+The Pod "readiness-demo" is invalid: spec: Forbidden: pod updates may not change fields other than `spec.containers[*].image`,`spec.initContainers[*].image`,`spec.activeDeadlineSeconds`,`spec.tolerations` (only additions to existing tolerations),`spec.terminationGracePeriodSeconds` (allow it to be set to 1 if it was previously negative)
+@@ -123,7 +123,7 @@
+    "ReadinessProbe": {
+     "Exec": null,
+     "HTTPGet": {
+-     "Path": "/",
++     "Path": "/wrongpath",
+      "Port": 80,
+      "Host": "",
+      "Scheme": "HTTP",
+
+
+controlplane ~ ✖ kubectl delete pod readiness-demo
+pod "readiness-demo" deleted from default namespace
+
+controlplane ~ ➜  k apply -f readiness.yaml 
+pod/readiness-demo created
+
+controlplane ~ ➜  k get po readiness-demo -w
+NAME             READY   STATUS    RESTARTS   AGE
+readiness-demo   0/1     Running   0          4s
+^C
+controlplane ~ ✖ k describe po readiness-demo | tail -10
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  55s                default-scheduler  Successfully assigned default/readiness-demo to node02
+  Normal   Pulling    55s                kubelet            Pulling image "nginx"
+  Normal   Pulled     55s                kubelet            Successfully pulled image "nginx" in 159ms (159ms including waiting). Image size: 59797235 bytes.
+  Normal   Created    55s                kubelet            Created container: nginx
+  Normal   Started    54s                kubelet            Started container nginx
+  Warning  Unhealthy  3s (x10 over 48s)  kubelet            Readiness probe failed: HTTP probe failed with statuscode: 404
+
+controlplane ~ ➜  
+
+
+----------------------------------------------------
+
+✔ Pod is running
+✔ Not ready
+✔ No restart
+
