@@ -1,0 +1,47 @@
+controlplane ~ ➜  cat <<EOF > bad-liveness.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bad-liveness
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    livenessProbe:
+      httpGet:
+        path: /wrongpath
+        port: 80
+      initialDelaySeconds: 5
+      periodSeconds: 5
+EOF
+
+controlplane ~ ➜  ls
+bad-liveness.yaml  LICENSE  README.md
+
+controlplane ~ ➜  k apply -f bad-liveness.yaml 
+pod/bad-liveness created
+
+controlplane ~ ➜  k get po bad-liveness 
+NAME           READY   STATUS              RESTARTS   AGE
+bad-liveness   0/1     ContainerCreating   0          6s
+
+controlplane ~ ➜  k get po bad-liveness 
+NAME           READY   STATUS    RESTARTS   AGE
+bad-liveness   1/1     Running   0          9s
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  k get po bad-liveness -w
+NAME           READY   STATUS    RESTARTS   AGE
+bad-liveness   1/1     Running   0          26s
+bad-liveness   1/1     Running   1 (2s ago)   27s
+bad-liveness   1/1     Running   2 (1s ago)   46s
+^C
+controlplane ~ ✖ k describe po bad-liveness | tail -5
+  Warning  Unhealthy  1s (x9 over 51s)   kubelet            Liveness probe failed: HTTP probe failed with statuscode: 404
+  Normal   Killing    1s (x3 over 41s)   kubelet            Container nginx failed liveness probe, will be restarted
+  Normal   Pulling    0s (x4 over 65s)   kubelet            Pulling image "nginx"
+  Normal   Created    0s (x4 over 59s)   kubelet            Created container: nginx
+  Normal   Pulled     0s (x2 over 40s)   kubelet            Successfully pulled image "nginx" in 161ms (161ms including waiting). Image size: 59797235 bytes.
+
+controlplane ~ ➜  
