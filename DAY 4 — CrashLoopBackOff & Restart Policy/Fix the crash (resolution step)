@@ -1,0 +1,15 @@
+controlplane ~ ➜  k delete po crashy 
+pod "crashy" deleted from default namespace
+
+controlplane ~ ➜  k run crashy --image busybox -- sleep 300
+pod/crashy created
+
+controlplane ~ ➜  k get po
+NAME     READY   STATUS    RESTARTS   AGE
+crashy   1/1     Running   0          3s
+
+controlplane ~ ➜  
+
+-----------------------------------------------------
+
+👉 Incident resolved
