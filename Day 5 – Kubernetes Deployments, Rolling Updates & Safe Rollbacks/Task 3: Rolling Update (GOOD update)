@@ -1,0 +1,43 @@
+controlplane ~ ➜  k set image deployments webserver nginx=nginx:1.25
+deployment.apps/webserver image updated
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  k describe deployments.apps webserver | grep -i image
+    Image:         nginx:1.25
+
+controlplane ~ ➜  k rollout status 
+daemonset    deployment   statefulset  
+
+controlplane ~ ➜  k rollout status deployment webserver 
+deployment "webserver" successfully rolled out
+
+controlplane ~ ➜  k rollout history deployment webserver 
+deployment.apps/webserver 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+
+
+controlplane ~ ➜  k get rs,po,deploy
+NAME                                   DESIRED   CURRENT   READY   AGE
+replicaset.apps/webserver-6d4b8f4959   3         3         3       69s
+replicaset.apps/webserver-cc6f5d7cc    0         0         0       7m55s
+
+NAME                             READY   STATUS    RESTARTS   AGE
+pod/webserver-6d4b8f4959-85hs6   1/1     Running   0          54s
+pod/webserver-6d4b8f4959-q98dk   1/1     Running   0          69s
+pod/webserver-6d4b8f4959-v8pww   1/1     Running   0          62s
+
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/webserver   3/3     3            3           7m55s
+
+controlplane ~ ➜  
+
+--------------------------------------------
+
+Observation:
+
+New ReplicaSet created
+Old pods terminated gradually
+No downtime
