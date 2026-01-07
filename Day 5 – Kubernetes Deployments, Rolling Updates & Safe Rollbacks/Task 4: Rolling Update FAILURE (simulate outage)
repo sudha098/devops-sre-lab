@@ -1,0 +1,147 @@
+controlplane ~ ✖ k set image deployments webserver nginx=nginx:doesnotexist
+deployment.apps/webserver image updated
+
+controlplane ~ ➜  k rollout 
+history  (View rollout history)                  resume   (Resume a paused resource)
+pause    (Mark the provided resource as paused)  status   (Show the status of the rollout)
+restart  (Restart a resource)                    undo     (Undo a previous rollout)
+
+controlplane ~ ➜  k rollout status 
+daemonset    deployment   statefulset  
+
+controlplane ~ ➜  k rollout status deployment webserver 
+Waiting for deployment "webserver" rollout to finish: 1 out of 3 new replicas have been updated...
+^C
+controlplane ~ ✖ k get po
+NAME                         READY   STATUS             RESTARTS   AGE
+webserver-5fc8697cc4-vr279   0/1     ImagePullBackOff   0          86s
+webserver-6d4b8f4959-85hs6   1/1     Running            0          4m14s
+webserver-6d4b8f4959-q98dk   1/1     Running            0          4m29s
+webserver-6d4b8f4959-v8pww   1/1     Running            0          4m22s
+
+controlplane ~ ➜  k get rc
+No resources found in default namespace.
+
+controlplane ~ ➜  k get rs
+NAME                   DESIRED   CURRENT   READY   AGE
+webserver-5fc8697cc4   1         1         0       101s
+webserver-6d4b8f4959   3         3         3       4m44s
+webserver-cc6f5d7cc    0         0         0       11m
+
+controlplane ~ ➜  k describe deployments.apps webserver 
+Name:                   webserver
+Namespace:              default
+CreationTimestamp:      Wed, 07 Jan 2026 16:29:51 +0000
+Labels:                 app=webserver
+Annotations:            deployment.kubernetes.io/revision: 3
+Selector:               app=webserver
+Replicas:               3 desired | 1 updated | 4 total | 3 available | 1 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=webserver
+  Containers:
+   nginx:
+    Image:         nginx:doesnotexist
+    Port:          <none>
+    Host Port:     <none>
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    ReplicaSetUpdated
+OldReplicaSets:  webserver-cc6f5d7cc (0/0 replicas created), webserver-6d4b8f4959 (3/3 replicas created)
+NewReplicaSet:   webserver-5fc8697cc4 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  11m    deployment-controller  Scaled up replica set webserver-cc6f5d7cc from 0 to 1
+  Normal  ScalingReplicaSet  8m47s  deployment-controller  Scaled up replica set webserver-cc6f5d7cc from 1 to 3
+  Normal  ScalingReplicaSet  4m59s  deployment-controller  Scaled up replica set webserver-6d4b8f4959 from 0 to 1
+  Normal  ScalingReplicaSet  4m52s  deployment-controller  Scaled down replica set webserver-cc6f5d7cc from 3 to 2
+  Normal  ScalingReplicaSet  4m52s  deployment-controller  Scaled up replica set webserver-6d4b8f4959 from 1 to 2
+  Normal  ScalingReplicaSet  4m44s  deployment-controller  Scaled down replica set webserver-cc6f5d7cc from 2 to 1
+  Normal  ScalingReplicaSet  4m44s  deployment-controller  Scaled up replica set webserver-6d4b8f4959 from 2 to 3
+  Normal  ScalingReplicaSet  4m42s  deployment-controller  Scaled down replica set webserver-cc6f5d7cc from 1 to 0
+  Normal  ScalingReplicaSet  116s   deployment-controller  Scaled up replica set webserver-5fc8697cc4 from 0 to 1
+
+controlplane ~ ➜  k describe po webserver-
+webserver-5fc8697cc4-vr279  webserver-6d4b8f4959-85hs6  webserver-6d4b8f4959-q98dk  webserver-6d4b8f4959-v8pww  
+
+controlplane ~ ➜  k describe po webserver-5fc8697cc4-vr279 
+Name:             webserver-5fc8697cc4-vr279
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             node01/192.168.102.71
+Start Time:       Wed, 07 Jan 2026 16:39:40 +0000
+Labels:           app=webserver
+                  pod-template-hash=5fc8697cc4
+Annotations:      cni.projectcalico.org/containerID: e1c0667cde6848d9d08fb9533271ea612fddc070ce6c81c100d02f8aa49ec065
+                  cni.projectcalico.org/podIP: 172.17.1.5/32
+                  cni.projectcalico.org/podIPs: 172.17.1.5/32
+Status:           Pending
+IP:               172.17.1.5
+IPs:
+  IP:           172.17.1.5
+Controlled By:  ReplicaSet/webserver-5fc8697cc4
+Containers:
+  nginx:
+    Container ID:   
+    Image:          nginx:doesnotexist
+    Image ID:       
+    Port:           <none>
+    Host Port:      <none>
+    State:          Waiting
+      Reason:       ImagePullBackOff
+    Ready:          False
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-92nwr (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-92nwr:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                  From               Message
+  ----     ------     ----                 ----               -------
+  Normal   Scheduled  2m29s                default-scheduler  Successfully assigned default/webserver-5fc8697cc4-vr279 to node01
+  Normal   Pulling    66s (x4 over 2m28s)  kubelet            Pulling image "nginx:doesnotexist"
+  Warning  Failed     66s (x4 over 2m28s)  kubelet            Failed to pull image "nginx:doesnotexist": rpc error: code = NotFound desc = failed to pull and unpack image "docker.io/library/nginx:doesnotexist": failed to resolve reference "docker.io/library/nginx:doesnotexist": docker.io/library/nginx:doesnotexist: not found
+  Warning  Failed     66s (x4 over 2m28s)  kubelet            Error: ErrImagePull
+  Normal   BackOff    10s (x9 over 2m27s)  kubelet            Back-off pulling image "nginx:doesnotexist"
+  Warning  Failed     10s (x9 over 2m27s)  kubelet            Error: ImagePullBackOff
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  
+------------------------------------------
+
+Expected:
+
+ImagePullBackOff
+Deployment stuck
+Old pods may already be terminating
+
+👉 This is a real production failure
