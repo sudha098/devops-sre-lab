@@ -1,0 +1,37 @@
+controlplane ~ ➜  k create deployment webserver --image nginx
+deployment.apps/webserver created
+
+controlplane ~ ➜  k get po
+NAME                        READY   STATUS              RESTARTS   AGE
+webserver-cc6f5d7cc-jkmlz   0/1     ContainerCreating   0          4s
+
+controlplane ~ ➜  k get po -w
+NAME                        READY   STATUS              RESTARTS   AGE
+webserver-cc6f5d7cc-jkmlz   0/1     ContainerCreating   0          7s
+webserver-cc6f5d7cc-jkmlz   1/1     Running             0          8s
+^C
+controlplane ~ ✖ k get rs
+NAME                  DESIRED   CURRENT   READY   AGE
+webserver-cc6f5d7cc   1         1         1       22s
+
+controlplane ~ ➜  k get po
+NAME                        READY   STATUS    RESTARTS   AGE
+webserver-cc6f5d7cc-jkmlz   1/1     Running   0          26s
+
+controlplane ~ ➜  k get deploy
+NAME        READY   UP-TO-DATE   AVAILABLE   AGE
+webserver   1/1     1            1           39s
+
+controlplane ~ ➜  
+
+---------------------------------------------------
+
+Observation:
+
+Deployment created
+
+ReplicaSet created
+
+Pod running
+
+👉 Never deploy raw Pods in production
