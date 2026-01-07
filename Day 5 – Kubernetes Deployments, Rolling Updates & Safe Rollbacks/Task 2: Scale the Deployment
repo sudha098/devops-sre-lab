@@ -1,0 +1,18 @@
+controlplane ~ ➜  k scale deploy webserver --replicas 3
+deployment.apps/webserver scaled
+
+controlplane ~ ➜  k get po
+NAME                        READY   STATUS    RESTARTS   AGE
+webserver-cc6f5d7cc-2fl7q   1/1     Running   0          2m1s
+webserver-cc6f5d7cc-jkmlz   1/1     Running   0          4m59s
+webserver-cc6f5d7cc-kcnzp   1/1     Running   0          2m1s
+
+controlplane ~ ➜  
+
+-----------------------------------
+
+
+Observation:
+
+3 pods running
+Same ReplicaSet
