@@ -1,0 +1,31 @@
+controlplane ~ ➜  k rollout undo deployment webserver 
+deployment.apps/webserver rolled back
+
+controlplane ~ ➜  k rollout status deployment webserver 
+deployment "webserver" successfully rolled out
+
+controlplane ~ ➜  k rollout history deployment webserver 
+deployment.apps/webserver 
+REVISION  CHANGE-CAUSE
+1         <none>
+3         <none>
+4         <none>
+
+
+controlplane ~ ➜  k get po
+NAME                         READY   STATUS    RESTARTS   AGE
+webserver-6d4b8f4959-85hs6   1/1     Running   0          12m
+webserver-6d4b8f4959-q98dk   1/1     Running   0          12m
+webserver-6d4b8f4959-v8pww   1/1     Running   0          12m
+
+controlplane ~ ➜  
+
+---------------------------------
+
+
+Expected:
+
+Previous ReplicaSet restored
+Stable pods running
+
+👉 This is how real outages are mitigated
