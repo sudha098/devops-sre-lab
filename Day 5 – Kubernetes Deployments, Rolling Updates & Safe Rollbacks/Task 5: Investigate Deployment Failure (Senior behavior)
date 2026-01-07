@@ -1,0 +1,165 @@
+controlplane ~ ➜  k describe deployments.apps webserver 
+Name:                   webserver
+Namespace:              default
+CreationTimestamp:      Wed, 07 Jan 2026 16:29:51 +0000
+Labels:                 app=webserver
+Annotations:            deployment.kubernetes.io/revision: 3
+Selector:               app=webserver
+Replicas:               3 desired | 1 updated | 4 total | 3 available | 1 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=webserver
+  Containers:
+   nginx:
+    Image:         nginx:doesnotexist
+    Port:          <none>
+    Host Port:     <none>
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    ReplicaSetUpdated
+OldReplicaSets:  webserver-cc6f5d7cc (0/0 replicas created), webserver-6d4b8f4959 (3/3 replicas created)
+NewReplicaSet:   webserver-5fc8697cc4 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  14m    deployment-controller  Scaled up replica set webserver-cc6f5d7cc from 0 to 1
+  Normal  ScalingReplicaSet  11m    deployment-controller  Scaled up replica set webserver-cc6f5d7cc from 1 to 3
+  Normal  ScalingReplicaSet  7m23s  deployment-controller  Scaled up replica set webserver-6d4b8f4959 from 0 to 1
+  Normal  ScalingReplicaSet  7m16s  deployment-controller  Scaled down replica set webserver-cc6f5d7cc from 3 to 2
+  Normal  ScalingReplicaSet  7m16s  deployment-controller  Scaled up replica set webserver-6d4b8f4959 from 1 to 2
+  Normal  ScalingReplicaSet  7m8s   deployment-controller  Scaled down replica set webserver-cc6f5d7cc from 2 to 1
+  Normal  ScalingReplicaSet  7m8s   deployment-controller  Scaled up replica set webserver-6d4b8f4959 from 2 to 3
+  Normal  ScalingReplicaSet  7m6s   deployment-controller  Scaled down replica set webserver-cc6f5d7cc from 1 to 0
+  Normal  ScalingReplicaSet  4m20s  deployment-controller  Scaled up replica set webserver-5fc8697cc4 from 0 to 1
+
+controlplane ~ ➜  k events 
+LAST SEEN               TYPE      REASON                    OBJECT                            MESSAGE
+37m                     Normal    Starting                  Node/controlplane                 Starting kubelet.
+37m                     Warning   CgroupV1                  Node/controlplane                 cgroup v1 support is in maintenance mode, please migrate to cgroup v2
+37m                     Warning   InvalidDiskCapacity       Node/controlplane                 invalid capacity 0 on image filesystem
+37m (x8 over 37m)       Normal    NodeHasSufficientMemory   Node/controlplane                 Node controlplane status is now: NodeHasSufficientMemory
+37m (x8 over 37m)       Normal    NodeHasNoDiskPressure     Node/controlplane                 Node controlplane status is now: NodeHasNoDiskPressure
+37m (x7 over 37m)       Normal    NodeHasSufficientPID      Node/controlplane                 Node controlplane status is now: NodeHasSufficientPID
+37m                     Normal    NodeAllocatableEnforced   Node/controlplane                 Updated Node Allocatable limit across pods
+36m                     Normal    Starting                  Node/controlplane                 Starting kubelet.
+36m                     Warning   CgroupV1                  Node/controlplane                 cgroup v1 support is in maintenance mode, please migrate to cgroup v2
+36m                     Warning   InvalidDiskCapacity       Node/controlplane                 invalid capacity 0 on image filesystem
+36m                     Normal    NodeAllocatableEnforced   Node/controlplane                 Updated Node Allocatable limit across pods
+36m                     Normal    NodeHasSufficientMemory   Node/controlplane                 Node controlplane status is now: NodeHasSufficientMemory
+36m                     Normal    NodeHasNoDiskPressure     Node/controlplane                 Node controlplane status is now: NodeHasNoDiskPressure
+36m                     Normal    NodeHasSufficientPID      Node/controlplane                 Node controlplane status is now: NodeHasSufficientPID
+36m                     Normal    RegisteredNode            Node/controlplane                 Node controlplane event: Registered Node controlplane in Controller
+36m                     Normal    Starting                  Node/controlplane                 
+36m                     Normal    NodeReady                 Node/controlplane                 Node controlplane status is now: NodeReady
+36m (x3 over 36m)       Normal    NodeHasSufficientMemory   Node/node01                       Node node01 status is now: NodeHasSufficientMemory
+36m                     Warning   InvalidDiskCapacity       Node/node01                       invalid capacity 0 on image filesystem
+36m                     Warning   CgroupV1                  Node/node01                       cgroup v1 support is in maintenance mode, please migrate to cgroup v2
+36m                     Normal    Starting                  Node/node01                       Starting kubelet.
+36m (x3 over 36m)       Normal    NodeHasNoDiskPressure     Node/node01                       Node node01 status is now: NodeHasNoDiskPressure
+36m (x3 over 36m)       Normal    NodeHasSufficientPID      Node/node01                       Node node01 status is now: NodeHasSufficientPID
+36m                     Normal    NodeAllocatableEnforced   Node/node01                       Updated Node Allocatable limit across pods
+36m                     Normal    RegisteredNode            Node/node01                       Node node01 event: Registered Node node01 in Controller
+36m                     Normal    Starting                  Node/node01                       
+35m                     Normal    NodeReady                 Node/node01                       Node node01 status is now: NodeReady
+35m                     Warning   CgroupV1                  Node/node02                       cgroup v1 support is in maintenance mode, please migrate to cgroup v2
+35m                     Normal    Starting                  Node/node02                       Starting kubelet.
+35m                     Warning   InvalidDiskCapacity       Node/node02                       invalid capacity 0 on image filesystem
+35m (x3 over 35m)       Normal    NodeHasSufficientMemory   Node/node02                       Node node02 status is now: NodeHasSufficientMemory
+35m (x3 over 35m)       Normal    NodeHasNoDiskPressure     Node/node02                       Node node02 status is now: NodeHasNoDiskPressure
+35m (x3 over 35m)       Normal    NodeHasSufficientPID      Node/node02                       Node node02 status is now: NodeHasSufficientPID
+35m                     Normal    NodeAllocatableEnforced   Node/node02                       Updated Node Allocatable limit across pods
+35m                     Normal    RegisteredNode            Node/node02                       Node node02 event: Registered Node node02 in Controller
+35m                     Normal    Starting                  Node/node02                       
+35m                     Normal    NodeReady                 Node/node02                       Node node02 status is now: NodeReady
+15m                     Normal    ScalingReplicaSet         Deployment/webserver              Scaled up replica set webserver-cc6f5d7cc from 0 to 1
+15m                     Normal    SuccessfulCreate          ReplicaSet/webserver-cc6f5d7cc    Created pod: webserver-cc6f5d7cc-jkmlz
+15m                     Normal    Scheduled                 Pod/webserver-cc6f5d7cc-jkmlz     Successfully assigned default/webserver-cc6f5d7cc-jkmlz to node02
+15m                     Normal    Pulling                   Pod/webserver-cc6f5d7cc-jkmlz     Pulling image "nginx"
+15m                     Normal    Pulled                    Pod/webserver-cc6f5d7cc-jkmlz     Successfully pulled image "nginx" in 5.185s (5.185s including waiting). Image size: 59797235 bytes.
+15m                     Normal    Created                   Pod/webserver-cc6f5d7cc-jkmlz     Created container: nginx
+15m                     Normal    Started                   Pod/webserver-cc6f5d7cc-jkmlz     Started container nginx
+12m                     Normal    ScalingReplicaSet         Deployment/webserver              Scaled up replica set webserver-cc6f5d7cc from 1 to 3
+12m                     Normal    SuccessfulCreate          ReplicaSet/webserver-cc6f5d7cc    Created pod: webserver-cc6f5d7cc-2fl7q
+12m                     Normal    SuccessfulCreate          ReplicaSet/webserver-cc6f5d7cc    Created pod: webserver-cc6f5d7cc-kcnzp
+12m                     Normal    Scheduled                 Pod/webserver-cc6f5d7cc-2fl7q     Successfully assigned default/webserver-cc6f5d7cc-2fl7q to node01
+12m                     Normal    Scheduled                 Pod/webserver-cc6f5d7cc-kcnzp     Successfully assigned default/webserver-cc6f5d7cc-kcnzp to node01
+12m                     Normal    Pulling                   Pod/webserver-cc6f5d7cc-kcnzp     Pulling image "nginx"
+12m                     Normal    Pulling                   Pod/webserver-cc6f5d7cc-2fl7q     Pulling image "nginx"
+12m                     Normal    Pulled                    Pod/webserver-cc6f5d7cc-kcnzp     Successfully pulled image "nginx" in 4.651s (4.651s including waiting). Image size: 59797235 bytes.
+12m                     Normal    Started                   Pod/webserver-cc6f5d7cc-kcnzp     Started container nginx
+12m                     Normal    Created                   Pod/webserver-cc6f5d7cc-kcnzp     Created container: nginx
+12m                     Normal    Started                   Pod/webserver-cc6f5d7cc-2fl7q     Started container nginx
+12m                     Normal    Created                   Pod/webserver-cc6f5d7cc-2fl7q     Created container: nginx
+12m                     Normal    Pulled                    Pod/webserver-cc6f5d7cc-2fl7q     Successfully pulled image "nginx" in 227ms (4.594s including waiting). Image size: 59797235 bytes.
+8m46s                   Normal    Scheduled                 Pod/webserver-6d4b8f4959-q98dk    Successfully assigned default/webserver-6d4b8f4959-q98dk to node01
+8m46s                   Normal    SuccessfulCreate          ReplicaSet/webserver-6d4b8f4959   Created pod: webserver-6d4b8f4959-q98dk
+8m46s                   Normal    ScalingReplicaSet         Deployment/webserver              Scaled up replica set webserver-6d4b8f4959 from 0 to 1
+8m45s                   Normal    Pulling                   Pod/webserver-6d4b8f4959-q98dk    Pulling image "nginx:1.25"
+8m40s                   Normal    Started                   Pod/webserver-6d4b8f4959-q98dk    Started container nginx
+8m40s                   Normal    Created                   Pod/webserver-6d4b8f4959-q98dk    Created container: nginx
+8m40s                   Normal    Pulled                    Pod/webserver-6d4b8f4959-q98dk    Successfully pulled image "nginx:1.25" in 5.187s (5.187s including waiting). Image size: 71005258 bytes.
+8m39s                   Normal    Killing                   Pod/webserver-cc6f5d7cc-kcnzp     Stopping container nginx
+8m39s                   Normal    ScalingReplicaSet         Deployment/webserver              Scaled up replica set webserver-6d4b8f4959 from 1 to 2
+8m39s                   Normal    SuccessfulCreate          ReplicaSet/webserver-6d4b8f4959   Created pod: webserver-6d4b8f4959-v8pww
+8m39s                   Normal    SuccessfulDelete          ReplicaSet/webserver-cc6f5d7cc    Deleted pod: webserver-cc6f5d7cc-kcnzp
+8m39s                   Normal    ScalingReplicaSet         Deployment/webserver              Scaled down replica set webserver-cc6f5d7cc from 3 to 2
+8m39s                   Normal    Scheduled                 Pod/webserver-6d4b8f4959-v8pww    Successfully assigned default/webserver-6d4b8f4959-v8pww to node02
+8m39s                   Normal    Pulling                   Pod/webserver-6d4b8f4959-v8pww    Pulling image "nginx:1.25"
+8m33s                   Normal    Pulled                    Pod/webserver-6d4b8f4959-v8pww    Successfully pulled image "nginx:1.25" in 5.939s (5.939s including waiting). Image size: 71005258 bytes.
+8m33s                   Normal    Created                   Pod/webserver-6d4b8f4959-v8pww    Created container: nginx
+8m32s                   Normal    Started                   Pod/webserver-6d4b8f4959-v8pww    Started container nginx
+8m31s                   Normal    ScalingReplicaSet         Deployment/webserver              Scaled down replica set webserver-cc6f5d7cc from 2 to 1
+8m31s                   Normal    ScalingReplicaSet         Deployment/webserver              Scaled up replica set webserver-6d4b8f4959 from 2 to 3
+8m31s                   Normal    Scheduled                 Pod/webserver-6d4b8f4959-85hs6    Successfully assigned default/webserver-6d4b8f4959-85hs6 to node02
+8m31s                   Normal    Killing                   Pod/webserver-cc6f5d7cc-2fl7q     Stopping container nginx
+8m31s                   Normal    SuccessfulDelete          ReplicaSet/webserver-cc6f5d7cc    Deleted pod: webserver-cc6f5d7cc-2fl7q
+8m31s                   Normal    SuccessfulCreate          ReplicaSet/webserver-6d4b8f4959   Created pod: webserver-6d4b8f4959-85hs6
+8m30s                   Normal    Started                   Pod/webserver-6d4b8f4959-85hs6    Started container nginx
+8m30s                   Normal    Created                   Pod/webserver-6d4b8f4959-85hs6    Created container: nginx
+8m30s                   Normal    Pulled                    Pod/webserver-6d4b8f4959-85hs6    Successfully pulled image "nginx:1.25" in 156ms (156ms including waiting). Image size: 71005258 bytes.
+8m30s                   Normal    Pulling                   Pod/webserver-6d4b8f4959-85hs6    Pulling image "nginx:1.25"
+8m29s                   Normal    Killing                   Pod/webserver-cc6f5d7cc-jkmlz     Stopping container nginx
+8m29s                   Normal    ScalingReplicaSet         Deployment/webserver              Scaled down replica set webserver-cc6f5d7cc from 1 to 0
+8m29s                   Normal    SuccessfulDelete          ReplicaSet/webserver-cc6f5d7cc    Deleted pod: webserver-cc6f5d7cc-jkmlz
+5m43s                   Normal    Scheduled                 Pod/webserver-5fc8697cc4-vr279    Successfully assigned default/webserver-5fc8697cc4-vr279 to node01
+5m43s                   Normal    SuccessfulCreate          ReplicaSet/webserver-5fc8697cc4   Created pod: webserver-5fc8697cc4-vr279
+5m43s                   Normal    ScalingReplicaSet         Deployment/webserver              Scaled up replica set webserver-5fc8697cc4 from 0 to 1
+2m55s (x5 over 5m42s)   Normal    Pulling                   Pod/webserver-5fc8697cc4-vr279    Pulling image "nginx:doesnotexist"
+2m55s (x5 over 5m42s)   Warning   Failed                    Pod/webserver-5fc8697cc4-vr279    Failed to pull image "nginx:doesnotexist": rpc error: code = NotFound desc = failed to pull and unpack image "docker.io/library/nginx:doesnotexist": failed to resolve reference "docker.io/library/nginx:doesnotexist": docker.io/library/nginx:doesnotexist: not found
+2m55s (x5 over 5m42s)   Warning   Failed                    Pod/webserver-5fc8697cc4-vr279    Error: ErrImagePull
+41s (x20 over 5m41s)    Warning   Failed                    Pod/webserver-5fc8697cc4-vr279    Error: ImagePullBackOff
+26s (x21 over 5m41s)    Normal    BackOff                   Pod/webserver-5fc8697cc4-vr279    Back-off pulling image "nginx:doesnotexist"
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  k get po
+NAME                         READY   STATUS             RESTARTS   AGE
+webserver-5fc8697cc4-vr279   0/1     ImagePullBackOff   0          6m55s
+webserver-6d4b8f4959-85hs6   1/1     Running            0          9m43s
+webserver-6d4b8f4959-q98dk   1/1     Running            0          9m58s
+webserver-6d4b8f4959-v8pww   1/1     Running            0          9m51s
+
+controlplane ~ ➜  
+
+------------------------------
+
+Look for:
+
+Conditions
+Failed replicas
+Events
+
+Ask yourself:
+
+Is traffic impacted?
+Are old pods still serving?
+How fast should we react?
