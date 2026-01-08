@@ -1,0 +1,42 @@
+controlplane ~ ➜  k get endpoints web-svc 
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+NAME      ENDPOINTS                     AGE
+web-svc   172.17.1.2:80,172.17.2.2:80   7m
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  k get endpointslices.discovery.k8s.io web-svc 
+Error from server (NotFound): endpointslices.discovery.k8s.io "web-svc" not found
+
+controlplane ~ ✖ k get endpointslices.discovery.k8s.io web-svc-fxjtz 
+NAME            ADDRESSTYPE   PORTS   ENDPOINTS               AGE
+web-svc-fxjtz   IPv4          80      172.17.1.2,172.17.2.2   7m13s
+
+controlplane ~ ➜  
+
+-----------------------------------
+
+Expected:
+
+Pod IPs listed
+
+⚠️ If endpoints are empty, the service is broken.
+This is a top SRE debugging check.
+
+⚠️ Warning:
+
+v1 Endpoints is deprecated in v1.33+
+
+What this is
+
+Original way Kubernetes stored Service → Pod mappings
+Single object per Service
+Does not scale well when thousands of Pods exist
+
+Limitations
+
+Large Services cause:
+Huge API objects
+Frequent updates
+API server & etcd load
+No slicing or advanced metadata
