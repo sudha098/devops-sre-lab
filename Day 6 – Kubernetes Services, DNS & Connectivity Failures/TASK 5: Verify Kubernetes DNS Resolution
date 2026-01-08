@@ -1,0 +1,55 @@
+controlplane ~ ➜  k run test --image busybox -it --rm -- sh
+All commands and output from this session will be recorded in container logs, including credentials and sensitive information passed through the command prompt.
+If you don't see a command prompt, try pressing enter.
+/ # 
+/ # nslookup web-svc
+Server:         172.20.0.10
+Address:        172.20.0.10:53
+
+Name:   web-svc.default.svc.cluster.local
+Address: 172.20.162.159
+
+** server can't find web-svc.jegvrin2noqr5dt5.svc.cluster.local: NXDOMAIN
+
+
+** server can't find web-svc.cluster.local: NXDOMAIN
+
+** server can't find web-svc.svc.cluster.local: NXDOMAIN
+
+** server can't find web-svc.svc.cluster.local: NXDOMAIN
+
+** server can't find web-svc.jegvrin2noqr5dt5.svc.cluster.local: NXDOMAIN
+
+** server can't find web-svc.cluster.local: NXDOMAIN
+
+** server can't find web-svc.us-central1-a.c.kk-lab-prod.internal: NXDOMAIN
+
+** server can't find web-svc.google.internal: NXDOMAIN
+
+** server can't find web-svc.c.kk-lab-prod.internal: NXDOMAIN
+
+** server can't find web-svc.us-central1-a.c.kk-lab-prod.internal: NXDOMAIN
+
+** server can't find web-svc.google.internal: NXDOMAIN
+
+** server can't find web-svc.c.kk-lab-prod.internal: NXDOMAIN
+
+/ # 
+/ # nslookup web-svc.default.svc.cluster.local
+Server:         172.20.0.10
+Address:        172.20.0.10:53
+
+
+Name:   web-svc.default.svc.cluster.local
+Address: 172.20.162.159
+
+/ # 
+/ # 
+
+===================================
+
+Expected:
+
+Service IP returned
+
+👉 Kubernetes DNS resolves service names, not pod IPs.
