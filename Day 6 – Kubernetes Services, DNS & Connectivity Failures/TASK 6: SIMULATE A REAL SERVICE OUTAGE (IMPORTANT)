@@ -1,0 +1,48 @@
+controlplane ~ ➜  k get svc web-svc 
+NAME      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+web-svc   ClusterIP   172.20.162.159   <none>        80/TCP    29m
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  kubectl get svc web-svc -o yaml | grep selector -A2
+  selector:
+    app: web
+  sessionAffinity: None
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  kubectl edit svc web
+Error from server (NotFound): services "web" not found
+
+controlplane ~ ✖ kubectl edit svc web-svc 
+service/web-svc edited
+
+controlplane ~ ➜  kubectl get svc web-svc -o yaml | grep selector -A2
+  selector:
+    app: web-broken
+  sessionAffinity: None
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  k get endpoints web-svc 
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+NAME      ENDPOINTS   AGE
+web-svc   <none>      30m
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  k run test --image busybox -it --rm -- sh
+All commands and output from this session will be recorded in container logs, including credentials and sensitive information passed through the command prompt.
+If you don't see a command prompt, try pressing enter.
+/ # 
+/ # wget -qO- http://web-svc
+wget: can't connect to remote host (172.20.162.159): Connection refused
+/ # 
+------------------------------------------
+
+❌ Connection fails
+✔ Pods still running
+✔ Service exists
+✔ Endpoints empty
+
+🎯 THIS is the real production outage scenario
