@@ -1,0 +1,23 @@
+controlplane ~ ➜  k create deployment web --image nginx
+deployment.apps/web created
+
+controlplane ~ ➜  k scale deployment web --replicas 2
+deployment.apps/web scaled
+
+controlplane ~ ➜  k get pods -o wide
+NAME                   READY   STATUS    RESTARTS   AGE   IP           NODE     NOMINATED NODE   READINESS GATES
+web-64c966cf88-ld4kd   1/1     Running   0          30s   172.17.1.2   node01   <none>           <none>
+web-64c966cf88-p9n2q   1/1     Running   0          11s   172.17.2.2   node02   <none>           <none>
+
+controlplane ~ ➜  k expose deployment web --name web-svc --port 80 --target-port 80
+service/web-svc exposed
+
+controlplane ~ ➜  k get svc
+NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   172.20.0.1       <none>        443/TCP   72m
+web-svc      ClusterIP   172.20.162.159   <none>        80/TCP    5s
+
+controlplane ~ ➜  
+
+-----------------------------------------
+👉 This Service is the stable entry point.
