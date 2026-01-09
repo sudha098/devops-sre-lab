@@ -22,7 +22,15 @@ metadata:
   uid: f7130f6f-f84a-40f3-bd30-40fb0967c5c9
 
 controlplane ~ ➜  
+controlplane ~ ➜  k get po 
+NAME          READY   STATUS    RESTARTS   AGE
+config-demo   1/1     Running   0          3m14s
+pod-b         1/1     Running   0          37m
 
+controlplane ~ ➜  k logs config-demo 
+APP_MODE=prod
+
+controlplane ~ ➜  
 --------------------------------------------------------
 
 ⚠️ Kubernetes will NOT restart pods automatically.
