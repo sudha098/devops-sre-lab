@@ -1,0 +1,60 @@
+controlplane ~ ➜  k expose pod pod-b --name pod-b-svc --port 80
+service/pod-b-svc exposed
+
+controlplane ~ ➜  k get svc -o wide
+NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+kubernetes   ClusterIP   172.20.0.1       <none>        443/TCP   28m   <none>
+pod-b-svc    ClusterIP   172.20.194.210   <none>        80/TCP    9s    run=pod-b
+
+controlplane ~ ➜  k run pod-a --image busybox -it --rm -- sh
+Error from server (AlreadyExists): pods "pod-a" already exists
+
+controlplane ~ ✖ k delete po pod-a -f
+error: flag needs an argument: 'f' in -f
+See 'kubectl delete --help' for usage.
+
+controlplane ~ ✖ k delete po pod-a --force
+Warning: Immediate deletion does not wait for confirmation that the running resource has been terminated. The resource may continue to run on the cluster indefinitely.
+pod "pod-a" force deleted from default namespace
+
+controlplane ~ ➜  k run pod-a --image busybox -it --rm -- sh
+All commands and output from this session will be recorded in container logs, including credentials and sensitive information passed through the command prompt.
+If you don't see a command prompt, try pressing enter.
+/ # wget -qO- http://pod-bpsvc
+wget: bad address 'pod-bpsvc'
+/ # ^C
+
+/ # wget -qO- http://pod-b-svc
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+/ # 
+
+----------------------------------
+
+Expected:
+
+Nginx HTML output
+
+👉 Service abstracts Pod IP changes.
+
