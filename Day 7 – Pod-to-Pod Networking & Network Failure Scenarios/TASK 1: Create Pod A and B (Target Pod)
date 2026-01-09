@@ -1,0 +1,25 @@
+controlplane ~ ➜  k run pod-b --image nginx
+pod/pod-b created
+
+controlplane ~ ➜  k get po -o wide
+NAME    READY   STATUS    RESTARTS   AGE   IP           NODE     NOMINATED NODE   READINESS GATES
+pod-b   1/1     Running   0          9s    172.17.1.2   node01   <none>           <none>
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  k run pod-a --image busybox -it --rm -- sh
+All commands and output from this session will be recorded in container logs, including credentials and sensitive information passed through the command prompt.
+If you don't see a command prompt, try pressing enter.
+/ # wget -qO- http://172.17.1.2
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+/ # 
