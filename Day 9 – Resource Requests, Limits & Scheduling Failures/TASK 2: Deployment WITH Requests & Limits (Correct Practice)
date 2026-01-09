@@ -1,0 +1,113 @@
+controlplane ~ ➜  cat <<EOF > limited-deploy.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: limited-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: limited-app
+  template:
+    metadata:
+      labels:
+        app: limited-app
+    spec:
+      containers:
+      - name: app
+        image: busybox
+        command: ["sh", "-c", "sleep 3600"]
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+EOF
+
+controlplane ~ ➜  k apply -f limited-deploy.yaml 
+deployment.apps/limited-app created
+
+controlplane ~ ➜  k describe po -l app=limited-deploy
+No resources found in default namespace.
+
+controlplane ~ ➜  k describe po -l app=limited-app
+Name:             limited-app-84b744d999-xzq7n
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             node02/192.168.102.178
+Start Time:       Fri, 09 Jan 2026 14:01:12 +0000
+Labels:           app=limited-app
+                  pod-template-hash=84b744d999
+Annotations:      cni.projectcalico.org/containerID: ceff8371226cf95325b04b9237d2d81880cd74e8ebe91a87531b08ea7a799692
+                  cni.projectcalico.org/podIP: 172.17.2.8/32
+                  cni.projectcalico.org/podIPs: 172.17.2.8/32
+Status:           Running
+IP:               172.17.2.8
+IPs:
+  IP:           172.17.2.8
+Controlled By:  ReplicaSet/limited-app-84b744d999
+Containers:
+  app:
+    Container ID:  containerd://dcf20e395e69904509741d30ecf1447ce3f514d1a72f79b5fd3bca767a55448f
+    Image:         busybox
+    Image ID:      docker.io/library/busybox@sha256:2383baad1860bbe9d8a7a843775048fd07d8afe292b94bd876df64a69aae7cb1
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      -c
+      sleep 3600
+    State:          Running
+      Started:      Fri, 09 Jan 2026 14:01:14 +0000
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     200m
+      memory:  256Mi
+    Requests:
+      cpu:        100m
+      memory:     128Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-fqssq (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-fqssq:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  28s   default-scheduler  Successfully assigned default/limited-app-84b744d999-xzq7n to node02
+  Normal  Pulling    27s   kubelet            Pulling image "busybox"
+  Normal  Pulled     27s   kubelet            Successfully pulled image "busybox" in 165ms (165ms including waiting). Image size: 2224358 bytes.
+  Normal  Created    27s   kubelet            Created container: app
+  Normal  Started    26s   kubelet            Started container app
+
+controlplane ~ ➜  
+
+------------------------------------
+
+Observe:
+
+Requests listed
+Limits listed
+
+✔ Scheduler knows where to place this pod
+✔ Node knows how much it can consume
