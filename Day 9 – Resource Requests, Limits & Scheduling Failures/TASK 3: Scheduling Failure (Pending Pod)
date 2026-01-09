@@ -1,0 +1,83 @@
+controlplane ~ ➜  cat <<EOF > impossible.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: impossible-pod
+spec:
+  containers:
+  - name: app
+    image: busybox
+    command: ["sh", "-c", "sleep 3600"]
+    resources:
+      requests:
+        cpu: "100"
+        memory: "100Gi"
+EOF
+
+controlplane ~ ➜  k apply -f impossible.yaml 
+pod/impossible-pod created
+
+controlplane ~ ➜  k describe po -l app=impossible-pod
+No resources found in default namespace.
+
+controlplane ~ ➜  k get po impossible-pod 
+NAME             READY   STATUS    RESTARTS   AGE
+impossible-pod   0/1     Pending   0          52s
+
+controlplane ~ ➜  k describe po impossible-pod 
+Name:             impossible-pod
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             <none>
+Labels:           <none>
+Annotations:      <none>
+Status:           Pending
+IP:               
+IPs:              <none>
+Containers:
+  app:
+    Image:      busybox
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sh
+      -c
+      sleep 3600
+    Requests:
+      cpu:        100
+      memory:     100Gi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-pgnmc (ro)
+Conditions:
+  Type           Status
+  PodScheduled   False 
+Volumes:
+  kube-api-access-pgnmc:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason            Age   From               Message
+  ----     ------            ----  ----               -------
+  Warning  FailedScheduling  58s   default-scheduler  0/3 nodes are available: 1 node(s) had untolerated taint {node-role.kubernetes.io/control-plane: }, 2 Insufficient cpu, 2 Insufficient memory. no new claims to deallocate, preemption: 0/3 nodes are available: 3 Preemption is not helpful for scheduling.
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  
+
+-------------------------------------------------
+
+Expected:
+
+Status: Pending
+Reason: Insufficient cpu/memory
+
+👉 Scheduler protects the cluster.
