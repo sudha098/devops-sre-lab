@@ -1,0 +1,446 @@
+controlplane ~ ➜  cat <<EOF > mem-kill.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mem-kill
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mem-kill
+  template:
+    metadata:
+      labels:
+        app: mem-kill
+    spec:
+      containers:
+      - name: app
+        image: polinux/stress
+        args: ["--vm", "1", "--vm-bytes", "500M"]
+        resources:
+          limits:
+            memory: "256Mi"
+EOF
+
+controlplane ~ ➜  k apply -f mem-kill.yaml 
+deployment.apps/mem-kill created
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  k get po -l app=mem-kill -w
+NAME                        READY   STATUS              RESTARTS     AGE
+mem-kill-77d7c5f58c-8zmhw   0/1     RunContainerError   2 (7s ago)   22s
+mem-kill-77d7c5f58c-8zmhw   0/1     CrashLoopBackOff    2 (15s ago)   30s
+mem-kill-77d7c5f58c-8zmhw   0/1     RunContainerError   3 (0s ago)    44s
+^C
+controlplane ~ ✖ 
+
+controlplane ~ ✖ k describe po mem-kill-77d7c5f58c-8zmhw 
+Name:             mem-kill-77d7c5f58c-8zmhw
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             node01/192.168.121.239
+Start Time:       Fri, 09 Jan 2026 14:06:31 +0000
+Labels:           app=mem-kill
+                  pod-template-hash=77d7c5f58c
+Annotations:      cni.projectcalico.org/containerID: d7982df93abc4868da53017b31dfe03201e41876868feb3dcfe4ad920717e812
+                  cni.projectcalico.org/podIP: 172.17.1.14/32
+                  cni.projectcalico.org/podIPs: 172.17.1.14/32
+Status:           Running
+IP:               172.17.1.14
+IPs:
+  IP:           172.17.1.14
+Controlled By:  ReplicaSet/mem-kill-77d7c5f58c
+Containers:
+  app:
+    Container ID:  containerd://6c83cefee81110c2e302385ba5ce9cf1c464b1948c37ed5d13740b07b62f904d
+    Image:         polinux/stress
+    Image ID:      docker.io/polinux/stress@sha256:b6144f84f9c15dac80deb48d3a646b55c7043ab1d83ea0a697c09097aaad21aa
+    Port:          <none>
+    Host Port:     <none>
+    Args:
+      --vm
+      1
+      --vm-bytes
+      500M
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       StartError
+      Message:      failed to create containerd task: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "--vm": executable file not found in $PATH: unknown
+      Exit Code:    128
+      Started:      Thu, 01 Jan 1970 00:00:00 +0000
+      Finished:     Fri, 09 Jan 2026 14:07:15 +0000
+    Ready:          False
+    Restart Count:  3
+    Limits:
+      memory:  256Mi
+    Requests:
+      memory:     256Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-hdgvj (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-hdgvj:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  58s                default-scheduler  Successfully assigned default/mem-kill-77d7c5f58c-8zmhw to node01
+  Normal   Pulled     56s                kubelet            Successfully pulled image "polinux/stress" in 883ms (883ms including waiting). Image size: 4041495 bytes.
+  Normal   Pulled     55s                kubelet            Successfully pulled image "polinux/stress" in 141ms (141ms including waiting). Image size: 4041495 bytes.
+  Normal   Pulled     43s                kubelet            Successfully pulled image "polinux/stress" in 135ms (135ms including waiting). Image size: 4041495 bytes.
+  Normal   Pulling    15s (x4 over 57s)  kubelet            Pulling image "polinux/stress"
+  Normal   Created    15s (x4 over 56s)  kubelet            Created container: app
+  Normal   Pulled     15s                kubelet            Successfully pulled image "polinux/stress" in 146ms (146ms including waiting). Image size: 4041495 bytes.
+  Warning  Failed     14s (x4 over 56s)  kubelet            Error: failed to create containerd task: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "--vm": executable file not found in $PATH: unknown
+  Warning  BackOff    2s (x6 over 55s)   kubelet            Back-off restarting failed container app in pod mem-kill-77d7c5f58c-8zmhw_default(333c6acd-133a-4d4f-9d9e-215c3ac602e9)
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  vim mem-kill.yaml 
+
+controlplane ~ ➜  k apply -f mem-kill.yaml 
+deployment.apps/mem-kill configured
+
+controlplane ~ ➜  k get po -l app=mem-kill -w
+NAME                        READY   STATUS             RESTARTS       AGE
+mem-kill-77d7c5f58c-8zmhw   0/1     CrashLoopBackOff   5 (117s ago)   4m58s
+mem-kill-c86db9599-7m9nm    0/1     OOMKilled          1 (1s ago)     4s
+mem-kill-c86db9599-7m9nm    0/1     CrashLoopBackOff   1 (1s ago)     5s
+^C
+controlplane ~ ✖ k describe po mem-kill-
+mem-kill-77d7c5f58c-8zmhw  mem-kill-c86db9599-7m9nm   
+
+controlplane ~ ✖ k describe po mem-kill-77d7c5f58c-8zmhw 
+Name:             mem-kill-77d7c5f58c-8zmhw
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             node01/192.168.121.239
+Start Time:       Fri, 09 Jan 2026 14:06:31 +0000
+Labels:           app=mem-kill
+                  pod-template-hash=77d7c5f58c
+Annotations:      cni.projectcalico.org/containerID: d7982df93abc4868da53017b31dfe03201e41876868feb3dcfe4ad920717e812
+                  cni.projectcalico.org/podIP: 172.17.1.14/32
+                  cni.projectcalico.org/podIPs: 172.17.1.14/32
+Status:           Running
+IP:               172.17.1.14
+IPs:
+  IP:           172.17.1.14
+Controlled By:  ReplicaSet/mem-kill-77d7c5f58c
+Containers:
+  app:
+    Container ID:  containerd://27669554ff3a0b1fa50e5c72268a1fa16a9e6f8a4fc468fa84823292f7620919
+    Image:         polinux/stress
+    Image ID:      docker.io/polinux/stress@sha256:b6144f84f9c15dac80deb48d3a646b55c7043ab1d83ea0a697c09097aaad21aa
+    Port:          <none>
+    Host Port:     <none>
+    Args:
+      --vm
+      1
+      --vm-bytes
+      500M
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       StartError
+      Message:      failed to create containerd task: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "--vm": executable file not found in $PATH: unknown
+      Exit Code:    128
+      Started:      Thu, 01 Jan 1970 00:00:00 +0000
+      Finished:     Fri, 09 Jan 2026 14:09:32 +0000
+    Ready:          False
+    Restart Count:  5
+    Limits:
+      memory:  256Mi
+    Requests:
+      memory:     256Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-hdgvj (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-hdgvj:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                    From               Message
+  ----     ------     ----                   ----               -------
+  Normal   Scheduled  5m24s                  default-scheduler  Successfully assigned default/mem-kill-77d7c5f58c-8zmhw to node01
+  Normal   Pulled     5m22s                  kubelet            Successfully pulled image "polinux/stress" in 883ms (883ms including waiting). Image size: 4041495 bytes.
+  Normal   Pulled     5m21s                  kubelet            Successfully pulled image "polinux/stress" in 141ms (141ms including waiting). Image size: 4041495 bytes.
+  Normal   Pulled     5m9s                   kubelet            Successfully pulled image "polinux/stress" in 135ms (135ms including waiting). Image size: 4041495 bytes.
+  Normal   Pulled     4m41s                  kubelet            Successfully pulled image "polinux/stress" in 146ms (146ms including waiting). Image size: 4041495 bytes.
+  Normal   Pulled     3m46s                  kubelet            Successfully pulled image "polinux/stress" in 148ms (148ms including waiting). Image size: 4041495 bytes.
+  Normal   Pulling    2m24s (x6 over 5m23s)  kubelet            Pulling image "polinux/stress"
+  Normal   Created    2m24s (x6 over 5m22s)  kubelet            Created container: app
+  Normal   Pulled     2m24s                  kubelet            Successfully pulled image "polinux/stress" in 164ms (164ms including waiting). Image size: 4041495 bytes.
+  Warning  Failed     2m23s (x6 over 5m22s)  kubelet            Error: failed to create containerd task: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "--vm": executable file not found in $PATH: unknown
+  Warning  BackOff    14s (x25 over 5m21s)   kubelet            Back-off restarting failed container app in pod mem-kill-77d7c5f58c-8zmhw_default(333c6acd-133a-4d4f-9d9e-215c3ac602e9)
+
+controlplane ~ ➜  k describe po mem-kill-
+mem-kill-77d7c5f58c-8zmhw  mem-kill-c86db9599-7m9nm   
+
+controlplane ~ ➜  k describe po mem-kill-c86db9599-7m9nm 
+Name:             mem-kill-c86db9599-7m9nm
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             node02/192.168.102.178
+Start Time:       Fri, 09 Jan 2026 14:11:25 +0000
+Labels:           app=mem-kill
+                  pod-template-hash=c86db9599
+Annotations:      cni.projectcalico.org/containerID: b44665719331289c68c5152ba43994c73140edacd3066d8131b7d0b3ac868c42
+                  cni.projectcalico.org/podIP: 172.17.2.9/32
+                  cni.projectcalico.org/podIPs: 172.17.2.9/32
+Status:           Running
+IP:               172.17.2.9
+IPs:
+  IP:           172.17.2.9
+Controlled By:  ReplicaSet/mem-kill-c86db9599
+Containers:
+  app:
+    Container ID:  containerd://29fcd018e591c48f597fd2e8c4af78fd1a6eb01b07c3cc5fdd9fdf4b19374e9b
+    Image:         polinux/stress
+    Image ID:      docker.io/polinux/stress@sha256:b6144f84f9c15dac80deb48d3a646b55c7043ab1d83ea0a697c09097aaad21aa
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      stress
+    Args:
+      --vm
+      1
+      --vm-bytes
+      500M
+      --vm-hang
+      1
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       OOMKilled
+      Exit Code:    1
+      Started:      Fri, 09 Jan 2026 14:12:08 +0000
+      Finished:     Fri, 09 Jan 2026 14:12:09 +0000
+    Ready:          False
+    Restart Count:  3
+    Limits:
+      memory:  256Mi
+    Requests:
+      memory:     256Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-6dm7d (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-6dm7d:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  73s                default-scheduler  Successfully assigned default/mem-kill-c86db9599-7m9nm to node02
+  Normal   Pulled     71s                kubelet            Successfully pulled image "polinux/stress" in 817ms (817ms including waiting). Image size: 4041495 bytes.
+  Normal   Pulled     70s                kubelet            Successfully pulled image "polinux/stress" in 137ms (137ms including waiting). Image size: 4041495 bytes.
+  Normal   Pulling    30s (x4 over 72s)  kubelet            Pulling image "polinux/stress"
+  Normal   Created    30s (x4 over 71s)  kubelet            Created container: app
+  Normal   Started    30s (x4 over 71s)  kubelet            Started container app
+  Normal   Pulled     30s (x2 over 57s)  kubelet            Successfully pulled image "polinux/stress" in 143ms (143ms including waiting). Image size: 4041495 bytes.
+  Warning  BackOff    1s (x7 over 69s)   kubelet            Back-off restarting failed container app in pod mem-kill-c86db9599-7m9nm_default(902c84d8-7227-4c33-a328-f5a60c4f10c7)
+
+controlplane ~ ➜  kubectl describe pod -l app=mem-kill
+Name:             mem-kill-c86db9599-7m9nm
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             node02/192.168.102.178
+Start Time:       Fri, 09 Jan 2026 14:11:25 +0000
+Labels:           app=mem-kill
+                  pod-template-hash=c86db9599
+Annotations:      cni.projectcalico.org/containerID: b44665719331289c68c5152ba43994c73140edacd3066d8131b7d0b3ac868c42
+                  cni.projectcalico.org/podIP: 172.17.2.9/32
+                  cni.projectcalico.org/podIPs: 172.17.2.9/32
+Status:           Running
+IP:               172.17.2.9
+IPs:
+  IP:           172.17.2.9
+Controlled By:  ReplicaSet/mem-kill-c86db9599
+Containers:
+  app:
+    Container ID:  containerd://485f22745028865e39f3ad9f5a282fc2f86f5c987c1bdbe020dd95cd4e4a52a6
+    Image:         polinux/stress
+    Image ID:      docker.io/polinux/stress@sha256:b6144f84f9c15dac80deb48d3a646b55c7043ab1d83ea0a697c09097aaad21aa
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      stress
+    Args:
+      --vm
+      1
+      --vm-bytes
+      500M
+      --vm-hang
+      1
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       OOMKilled
+      Exit Code:    1
+      Started:      Fri, 09 Jan 2026 14:12:52 +0000
+      Finished:     Fri, 09 Jan 2026 14:12:53 +0000
+    Ready:          False
+    Restart Count:  4
+    Limits:
+      memory:  256Mi
+    Requests:
+      memory:     256Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-6dm7d (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-6dm7d:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                   From               Message
+  ----     ------     ----                  ----               -------
+  Normal   Scheduled  2m44s                 default-scheduler  Successfully assigned default/mem-kill-c86db9599-7m9nm to node02
+  Normal   Pulled     2m42s                 kubelet            Successfully pulled image "polinux/stress" in 817ms (817ms including waiting). Image size: 4041495 bytes.
+  Normal   Pulled     2m41s                 kubelet            Successfully pulled image "polinux/stress" in 137ms (137ms including waiting). Image size: 4041495 bytes.
+  Normal   Pulled     2m1s (x2 over 2m28s)  kubelet            Successfully pulled image "polinux/stress" in 143ms (143ms including waiting). Image size: 4041495 bytes.
+  Normal   Pulling    77s (x5 over 2m43s)   kubelet            Pulling image "polinux/stress"
+  Normal   Created    77s (x5 over 2m42s)   kubelet            Created container: app
+  Normal   Started    77s (x5 over 2m42s)   kubelet            Started container app
+  Normal   Pulled     77s                   kubelet            Successfully pulled image "polinux/stress" in 155ms (155ms including waiting). Image size: 4041495 bytes.
+  Warning  BackOff    7s (x13 over 2m40s)   kubelet            Back-off restarting failed container app in pod mem-kill-c86db9599-7m9nm_default(902c84d8-7227-4c33-a328-f5a60c4f10c7)
+
+controlplane ~ ➜  
+
+--------------------------------
+
+This tells us:
+
+✔ Container started successfully
+✔ Container allocated more memory than allowed
+✔ Kernel OOM-killed the process
+✔ Kubernetes restarted it
+✔ Backoff kicked in → CrashLoopBackOff
+
+🧠 Why the pod shows Running but container is crashing
+
+You might notice:
+
+Status: Running
+State:  Waiting (CrashLoopBackOff)
+
+This is normal and important.
+
+Pod = Running (object exists, scheduled)
+Container = failing repeatedly
+Kubernetes is retrying with exponential backoff
+
+👉 Many production dashboards show “Running” even during outages — this is why logs & events matter.
+-------------------------------------------------------------------
+
+🔴 What actually went wrong (root cause)
+Key error:
+exec: "--vm": executable file not found in $PATH
+
+Why this happened
+
+You used this container spec:
+
+image: polinux/stress
+args: ["--vm", "1", "--vm-bytes", "500M"]
+
+
+But BusyBox-style images don’t have an entrypoint that accepts args like this automatically.
+The container runtime tried to run:
+"--vm"
+as a command — which obviously doesn’t exist.
+
+👉 This is NOT a Kubernetes memory issue
+👉 This is a container command/args misconfiguration
+
+That’s why you see:
+Reason: StartError
+Exit code 128
+No OOMKill
+
+
+🧠 Senior Mental Model (important)
+
+There are two very different failure classes:
+
+Failure Type	Where it fails	Example
+StartError	Container runtime	Bad command / args
+OOMKilled	Kernel	Memory limit exceeded
+
+Your failure is StartError, not OOM.
+
+“The pod entered CrashLoopBackOff because the container exceeded its memory limit and was OOMKilled. Kubernetes restarted it automatically, and backoff increased with each failure.”
+
+Compare CPU vs Memory Enforcement (Think Like SRE)
+--------------------------------------------------------------
+Ask yourself:
+
+CPU limit → throttling (soft)
+Memory limit → OOMKill (hard)
+Which is more dangerous? (memory)
+
+This is why memory limits are critical.
