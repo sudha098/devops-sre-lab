@@ -1,0 +1,28 @@
+
+controlplane ~ ➜  k edit cm 
+app-config        kube-root-ca.crt  
+
+controlplane ~ ➜  k edit cm app-config 
+configmap/app-config edited
+
+controlplane ~ ➜  k get cm app-config -o wide
+NAME         DATA   AGE
+app-config   1      13m
+
+controlplane ~ ➜  k get cm app-config -o yaml
+apiVersion: v1
+data:
+  APP_MODE: ""
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2026-01-09T13:18:18Z"
+  name: app-config
+  namespace: default
+  resourceVersion: "6250"
+  uid: f7130f6f-f84a-40f3-bd30-40fb0967c5c9
+
+controlplane ~ ➜  
+
+--------------------------------------------------------
+
+⚠️ Kubernetes will NOT restart pods automatically.
