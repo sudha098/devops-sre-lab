@@ -2,12 +2,10 @@ controlplane ~ ➜  kubectl run pod-a --image=busybox -it --rm -- sh
 All commands and output from this session will be recorded in container logs, including credentials and sensitive information passed through the command prompt.
 If you don't see a command prompt, try pressing enter.
 / # wget -qO- http://172.7.1.2
-^C
-/ # exit
-Session ended, resume using 'kubectl attach pod-a -c pod-a -i -t' command when the pod is running
-pod "pod-a" deleted from default namespace
+wget: can't connect to remote host (172.7.1.2): Connection timed out
+/ # Session ended, resume using 'kubectl attach pod-a -c pod-a -i -t' command when the pod is running
+No resources found
 
-controlplane ~ ➜  
 ----------------------------------------------
 
 Expected:
