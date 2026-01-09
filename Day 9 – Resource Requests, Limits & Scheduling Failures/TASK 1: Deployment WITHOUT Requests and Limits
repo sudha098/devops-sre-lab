@@ -1,0 +1,92 @@
+controlplane ~ ➜  k create deployment no-limits --image nginx -- sleep 3600
+\deployment.apps/no-limits created
+
+controlplane ~ ➜  \k get deploy
+-bash: k: command not found
+
+controlplane ~ ✖ k get deploy
+NAME        READY   UP-TO-DATE   AVAILABLE   AGE
+no-limits   1/1     1            1           10s
+
+controlplane ~ ➜  k get po
+NAME                         READY   STATUS    RESTARTS   AGE
+no-limits-6cf7c6b6d7-sn6m6   1/1     Running   0          13s
+
+controlplane ~ ➜  k describe po -l app=no-limits
+Name:             no-limits-6cf7c6b6d7-sn6m6
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             node01/192.168.121.239
+Start Time:       Fri, 09 Jan 2026 13:58:35 +0000
+Labels:           app=no-limits
+                  pod-template-hash=6cf7c6b6d7
+Annotations:      cni.projectcalico.org/containerID: 6a76f529fa2e16e18c13cd7bcb26122da8262a58069c5493f9cacbcae7c7faa3
+                  cni.projectcalico.org/podIP: 172.17.1.13/32
+                  cni.projectcalico.org/podIPs: 172.17.1.13/32
+Status:           Running
+IP:               172.17.1.13
+IPs:
+  IP:           172.17.1.13
+Controlled By:  ReplicaSet/no-limits-6cf7c6b6d7
+Containers:
+  nginx:
+    Container ID:  containerd://024ce7e996f43805427461c8fff990c30caf6ec5e07a3ea24f307ae5fd4d960c
+    Image:         nginx
+    Image ID:      docker.io/library/nginx@sha256:ca871a86d45a3ec6864dc45f014b11fe626145569ef0e74deaffc95a3b15b430
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sleep
+      3600
+    State:          Running
+      Started:      Fri, 09 Jan 2026 13:58:36 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-5q5bf (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-5q5bf:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  32s   default-scheduler  Successfully assigned default/no-limits-6cf7c6b6d7-sn6m6 to node01
+  Normal  Pulling    31s   kubelet            Pulling image "nginx"
+  Normal  Pulled     31s   kubelet            Successfully pulled image "nginx" in 144ms (144ms including waiting). Image size: 59797235 bytes.
+  Normal  Created    31s   kubelet            Created container: nginx
+  Normal  Started    31s   kubelet            Started container nginx
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  
+
+------------------------------------
+
+Observe:
+
+No CPU requests
+
+No memory requests
+
+No limits
+
+👉 This pod can consume unbounded resources.
+
+
