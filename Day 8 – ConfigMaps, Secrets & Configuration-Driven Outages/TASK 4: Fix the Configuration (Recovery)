@@ -1,0 +1,43 @@
+controlplane ~ ➜  k edit cm app-config 
+configmap/app-config edited
+
+controlplane ~ ➜  k get cm app-config -o yaml
+apiVersion: v1
+data:
+  APP_MODE: prod
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2026-01-09T13:18:18Z"
+  name: app-config
+  namespace: default
+  resourceVersion: "7643"
+  uid: f7130f6f-f84a-40f3-bd30-40fb0967c5c9
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  k get po
+NAME                           READY   STATUS    RESTARTS   AGE
+config-demo-655446c647-spjfv   1/1     Running   0          6m12s
+pod-b                          1/1     Running   0          50m
+
+controlplane ~ ➜  k logs deployments/config-demo 
+APP_MODE=
+
+controlplane ~ ➜  k delete po config-demo-655446c647-spjfv 
+pod "config-demo-655446c647-spjfv" deleted from default namespace
+
+controlplane ~ ➜  k get po
+NAME                           READY   STATUS    RESTARTS   AGE
+config-demo-655446c647-r2t2w   1/1     Running   0          37s
+pod-b                          1/1     Running   0          51m
+
+controlplane ~ ➜  k logs deployments/config-demo 
+APP_MODE=prod
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  
+
+-------------------------------------------------------------------------------
+
+✔ Application recovered
