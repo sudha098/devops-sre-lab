@@ -1,0 +1,70 @@
+controlplane ~ ➜  k create cm app-config --from-literal=APP_MODE=prod
+error: failed to create configmap: configmaps "app-config" already exists
+
+controlplane ~ ✖ 
+
+controlplane ~ ✖ k get cm app-config -o yaml
+apiVersion: v1
+data:
+  APP_MODE: prod
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2026-01-09T13:18:18Z"
+  name: app-config
+  namespace: default
+  resourceVersion: "4999"
+  uid: f7130f6f-f84a-40f3-bd30-40fb0967c5c9
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  cat <<EOF > config_demo.yaml
+> apiVersion: v1
+kind: Pod
+metadata:
+  name: config-demo
+spec:
+  containers:
+  - name: app
+    image: busybox
+    command: ["sh", "-c", "echo APP_MODE=\$APP_MODE && sleep 3600"]
+    env:
+    - name: APP_MODE
+      valueFrom:
+        configMapKeyRef:
+          name: app-config
+          key: APP_MODE
+> EOF
+
+controlplane ~ ➜  ls
+config_demo.yaml  LICENSE  README.md
+
+controlplane ~ ➜  cat config_demo.yaml 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: config-demo
+spec:
+  containers:
+  - name: app
+    image: busybox
+    command: ["sh", "-c", "echo APP_MODE=$APP_MODE && sleep 3600"]
+    env:
+    - name: APP_MODE
+      valueFrom:
+        configMapKeyRef:
+          name: app-config
+          key: APP_MODE
+
+controlplane ~ ➜  k apply -f config_demo.yaml 
+pod/config-demo created
+
+controlplane ~ ➜  kubectl logs config-demo
+APP_MODE=prod
+
+controlplane ~ ➜  
+
+----------------------------
+
+✔ Config is injected correctly
