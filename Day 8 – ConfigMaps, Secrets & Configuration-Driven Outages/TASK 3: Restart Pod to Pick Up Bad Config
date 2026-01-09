@@ -97,4 +97,20 @@ Pod is deleted
 Deployment recreates it automatically
 New pod reads bad config
 
-🎯 THIS is the real production scenario
+
+👉 App is now misconfigured
+👉 Kubernetes shows Running
+👉 Infra is healthy, app logic is broken
+
+This is a very common production outage.
+
+# Observe the Failure Pattern (Senior Thinking)
+
+Ask yourself:
+
+Are nodes healthy? ✅
+Are pods running? ✅
+Are services broken? ❌
+Is config valid? ❌
+
+👉 This is why config outages are hard to detect.
