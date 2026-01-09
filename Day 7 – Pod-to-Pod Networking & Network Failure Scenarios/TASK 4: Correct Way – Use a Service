@@ -48,6 +48,54 @@ Commercial support is available at
 <p><em>Thank you for using nginx.</em></p>
 </body>
 </html>
+/ # exit
+
+controlplane ~ ➜  k run pod-a --image busybox -it --rm -- sh
+All commands and output from this session will be recorded in container logs, including credentials and sensitive information passed through the command prompt.
+If you don't see a command prompt, try pressing enter.
+/ # 
+/ # 
+/ # nslookup pod-b-svc
+Server:         172.20.0.10
+Address:        172.20.0.10:53
+
+** server can't find pod-b-svc.cluster.local: NXDOMAIN
+
+Name:   pod-b-svc.default.svc.cluster.local
+Address: 172.20.194.210
+
+** server can't find pod-b-svc.svc.cluster.local: NXDOMAIN
+
+
+** server can't find pod-b-svc.svc.cluster.local: NXDOMAIN
+
+** server can't find pod-b-svc.ximscc4jsfohflx5.svc.cluster.local: NXDOMAIN
+
+** server can't find pod-b-svc.cluster.local: NXDOMAIN
+
+** server can't find pod-b-svc.ximscc4jsfohflx5.svc.cluster.local: NXDOMAIN
+
+** server can't find pod-b-svc.us-central1-a.c.kk-lab-prod.internal: NXDOMAIN
+
+** server can't find pod-b-svc.us-central1-a.c.kk-lab-prod.internal: NXDOMAIN
+
+** server can't find pod-b-svc.c.kk-lab-prod.internal: NXDOMAIN
+
+** server can't find pod-b-svc.c.kk-lab-prod.internal: NXDOMAIN
+
+** server can't find pod-b-svc.google.internal: NXDOMAIN
+
+** server can't find pod-b-svc.google.internal: NXDOMAIN
+
+/ # 
+/ # nslookup pod-b-svc.default.svc.cluster.local
+Server:         172.20.0.10
+Address:        172.20.0.10:53
+
+
+Name:   pod-b-svc.default.svc.cluster.local
+Address: 172.20.194.210
+
 / # 
 
 ----------------------------------
@@ -58,3 +106,8 @@ Nginx HTML output
 
 👉 Service abstracts Pod IP changes.
 
+Expected:
+
+Service IP returned
+
+👉 Kubernetes DNS resolves service names, not pod IPs.
