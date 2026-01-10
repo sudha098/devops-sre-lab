@@ -1,0 +1,32 @@
+admin@docker-host ➜  docker inspect web | grep -A5 Entrypoint
+            "Entrypoint": [
+                "/docker-entrypoint.sh"
+            ],
+            "OnBuild": null,
+            "Labels": {
+                "maintainer": "NGINX Docker Maintainers <docker-maint@nginx.com>"
+
+admin@docker-host ➜  
+
+admin@docker-host ➜  docker inspect web | grep -A5 cmd
+
+admin@docker-host ✖ docker inspect web | grep -A5 Cmd
+            "Cmd": [
+                "nginx",
+                "-g",
+                "daemon off;"
+            ],
+            "Image": "nginx",
+
+admin@docker-host ➜  
+
+
+---------------------------------
+
+Key insight:
+
+ENTRYPOINT = fixed executable
+
+CMD = default arguments
+
+Most startup failures come from misunderstanding this.
