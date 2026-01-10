@@ -1,0 +1,22 @@
+admin@docker-host ➜  docker run busybox false
+
+admin@docker-host ✖ docker ps -a
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS                        PORTS     NAMES
+8bc268e2609d   busybox   "false"                  6 seconds ago    Exited (1) 6 seconds ago                affectionate_kapitsa
+7334b4cbfb79   busybox   "echo Hello"             2 minutes ago    Exited (0) 2 minutes ago                fervent_nash
+36c307c52960   myapp     "sh -c 'echo Hello f…"   5 minutes ago    Up 5 minutes                            romantic_snyder
+64eb39912ef4   nginx     "sh -c 'nginx -v'"       11 minutes ago   Exited (0) 11 minutes ago               optimistic_villani
+7e3c94c2c7f3   nginx     "sh"                     11 minutes ago   Exited (0) 11 minutes ago               sleepy_liskov
+403bf91913e2   nginx     "/docker-entrypoint.…"   17 minutes ago   Exited (127) 17 minutes ago             romantic_haslett
+4ce6601f0393   nginx     "/docker-entrypoint.…"   26 minutes ago   Up 26 minutes                 80/tcp    web
+
+admin@docker-host ➜  
+
+
+----------------------------------------------
+
+Expected:
+
+Exit code 1
+
+👉 Kubernetes would restart this endlessly → CrashLoopBackOff.
