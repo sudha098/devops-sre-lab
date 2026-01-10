@@ -1,0 +1,46 @@
+admin@docker-host ➜  vim Dockerfile
+
+admin@docker-host ➜  cat Dockerfile 
+FROM busybox
+
+CMD ["sh", "-c", "echo Hello forom conatiner && sleep 3600"]
+
+
+admin@docker-host ✖ docker build -t . myapp
+[+] Building 0.0s (0/0)                                                                                                          docker:default
+ERROR: invalid tag ".": invalid reference format
+
+admin@docker-host ✖ docker build -t myapp .
+[+] Building 30.4s (5/5) FINISHED                                                                                                docker:default
+ => [internal] load build definition from Dockerfile                                                                                       0.0s
+ => => transferring dockerfile: 112B                                                                                                       0.0s
+ => [internal] load metadata for docker.io/library/busybox:latest                                                                         30.2s
+ => [internal] load .dockerignore                                                                                                          0.0s
+ => => transferring context: 2B                                                                                                            0.0s
+ => [1/1] FROM docker.io/library/busybox:latest@sha256:2383baad1860bbe9d8a7a843775048fd07d8afe292b94bd876df64a69aae7cb1                    0.2s
+ => => resolve docker.io/library/busybox:latest@sha256:2383baad1860bbe9d8a7a843775048fd07d8afe292b94bd876df64a69aae7cb1                    0.0s
+ => => extracting sha256:e59838ecfec5e79eb4371e9995ef86c8000fe1c67d7b9fa7b57e996d9ba772ff                                                  0.1s
+ => => sha256:2383baad1860bbe9d8a7a843775048fd07d8afe292b94bd876df64a69aae7cb1 9.54kB / 9.54kB                                             0.0s
+ => => sha256:870e815c3a50dd0f6b40efddb319c72c32c3ee340b5a3e8945904232ccd12f44 610B / 610B                                                 0.0s
+ => => sha256:08ef35a1c3f050afbbd64194ffd1b8d5878659f5491567f26d1c814513ae9649 459B / 459B                                                 0.0s
+ => => sha256:e59838ecfec5e79eb4371e9995ef86c8000fe1c67d7b9fa7b57e996d9ba772ff 2.21MB / 2.21MB                                             0.0s
+ => exporting to image                                                                                                                     0.0s
+ => => exporting layers                                                                                                                    0.0s
+ => => writing image sha256:ef2cc6c9f9e0cf391ab3e138b2c2f8752e5df3664b2096b772a978eb8848b654                                               0.0s
+ => => naming to docker.io/library/myapp                                                                                                   0.0s
+
+admin@docker-host ➜  docker images
+REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
+nginx        latest    2e97da2b9cb3   23 hours ago    161MB
+myapp        latest    ef2cc6c9f9e0   15 months ago   4.43MB
+
+admin@docker-host ➜  
+
+admin@docker-host ➜  docker run myapp
+Hello forom conatiner
+
+--------------------------------------
+✔ Container starts
+✔ Command executes
+✔ Process stays alive
+
