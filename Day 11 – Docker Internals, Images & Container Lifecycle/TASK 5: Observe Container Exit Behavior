@@ -1,0 +1,47 @@
+admin@docker-host ➜  docker run busybox echo "Hello"
+Unable to find image 'busybox:latest' locally
+latest: Pulling from library/busybox
+e59838ecfec5: Already exists 
+Digest: sha256:2383baad1860bbe9d8a7a843775048fd07d8afe292b94bd876df64a69aae7cb1
+Status: Downloaded newer image for busybox:latest
+Hello
+
+admin@docker-host ➜  docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS     NAMES
+36c307c52960   myapp     "sh -c 'echo Hello f…"   3 minutes ago    Up 3 minutes              romantic_snyder
+4ce6601f0393   nginx     "/docker-entrypoint.…"   24 minutes ago   Up 24 minutes   80/tcp    web
+
+admin@docker-host ➜  
+
+admin@docker-host ➜  docker ps -A
+unknown shorthand flag: 'A' in -A
+See 'docker ps --help'.
+
+admin@docker-host ✖ docker ps -A
+unknown shorthand flag: 'A' in -A
+See 'docker ps --help'.
+
+admin@docker-host ✖ docker ps -a
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS                        PORTS     NAMES
+7334b4cbfb79   busybox   "echo Hello"             19 seconds ago   Exited (0) 17 seconds ago               fervent_nash
+36c307c52960   myapp     "sh -c 'echo Hello f…"   4 minutes ago    Up 3 minutes                            romantic_snyder
+64eb39912ef4   nginx     "sh -c 'nginx -v'"       9 minutes ago    Exited (0) 9 minutes ago                optimistic_villani
+7e3c94c2c7f3   nginx     "sh"                     9 minutes ago    Exited (0) 9 minutes ago                sleepy_liskov
+403bf91913e2   nginx     "/docker-entrypoint.…"   15 minutes ago   Exited (127) 15 minutes ago             romantic_haslett
+4ce6601f0393   nginx     "/docker-entrypoint.…"   24 minutes ago   Up 24 minutes                 80/tcp    web
+
+admin@docker-host ➜  
+
+admin@docker-host ➜  
+
+---------------------------------------------
+
+Observe:
+
+Container exited immediately
+
+Exit code 0
+
+👉 Containers exit when PID 1 exits
+
+This explains many Kubernetes pod restarts.
