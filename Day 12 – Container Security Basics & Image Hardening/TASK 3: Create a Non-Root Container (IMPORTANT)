@@ -1,0 +1,137 @@
+admin@docker-host ➜  vim Dockerfile
+
+admin@docker-host ➜  cat Dockerfile 
+FROM nginx
+
+RUN adduser -D appuser
+
+USER appuser
+
+
+admin@docker-host ➜  docker build -t nonroot_image_nginx .
+[+] Building 1.0s (5/5) FINISHED                                                                                                 docker:default
+ => [internal] load build definition from Dockerfile                                                                                       0.0s
+ => => transferring dockerfile: 87B                                                                                                        0.0s
+ => [internal] load metadata for docker.io/library/nginx:latest                                                                            0.0s
+ => [internal] load .dockerignore                                                                                                          0.0s
+ => => transferring context: 2B                                                                                                            0.0s
+ => [1/2] FROM docker.io/library/nginx:latest                                                                                              0.0s
+ => ERROR [2/2] RUN adduser -D appuser                                                                                                     0.9s
+------                                                                                                                                          
+ > [2/2] RUN adduser -D appuser:
+0.480 /bin/sh: 1: adduser: not found
+------
+Dockerfile:3
+--------------------
+   1 |     FROM nginx
+   2 |     
+   3 | >>> RUN adduser -D appuser
+   4 |     
+   5 |     USER appuser
+--------------------
+ERROR: failed to solve: process "/bin/sh -c adduser -D appuser" did not complete successfully: exit code: 127
+
+admin@docker-host ✖ vim Dockerfile
+
+admin@docker-host ➜  docker build -t nonroot_image_nginx .
+[+] Building 0.5s (5/5) FINISHED                                                                                                 docker:default
+ => [internal] load build definition from Dockerfile                                                                                       0.0s
+ => => transferring dockerfile: 87B                                                                                                        0.0s
+ => [internal] load metadata for docker.io/library/nginx:latest                                                                            0.0s
+ => [internal] load .dockerignore                                                                                                          0.0s
+ => => transferring context: 2B                                                                                                            0.0s
+ => CACHED [1/2] FROM docker.io/library/nginx:latest                                                                                       0.0s
+ => ERROR [2/2] RUN useradd -D appuser                                                                                                     0.5s
+------                                                                                                                                          
+ > [2/2] RUN useradd -D appuser:                                                                                                                
+0.469 Usage: useradd [options] LOGIN                                                                                                            
+0.469        useradd -D                                                                                                                         
+0.469        useradd -D [options]                                                                                                               
+0.469                                                                                                                                           
+0.469 Options:
+0.469       --badname                 do not check for bad names (DEPRECATED)
+0.469   -b, --base-dir BASE_DIR       base directory for the home directory of the
+0.469                                 new account
+0.469       --btrfs-subvolume-home    use BTRFS subvolume for home directory
+0.469   -c, --comment COMMENT         GECOS field of the new account
+0.469   -d, --home-dir HOME_DIR       home directory of the new account
+0.469   -D, --defaults                print or change default useradd configuration
+0.469   -e, --expiredate EXPIRE_DATE  expiration date of the new account
+0.469   -f, --inactive INACTIVE       password inactivity period of the new account
+0.469   -F, --add-subids-for-system   add entries to sub[ud]id even when adding a system user
+0.469   -g, --gid GROUP               name or ID of the primary group of the new
+0.469                                 account
+0.469   -G, --groups GROUPS           list of supplementary groups of the new
+0.469                                 account
+0.469   -h, --help                    display this help message and exit
+0.469   -k, --skel SKEL_DIR           use this alternative skeleton directory
+0.469   -K, --key KEY=VALUE           override /etc/login.defs defaults
+0.469   -m, --create-home             create the user's home directory
+0.469   -M, --no-create-home          do not create the user's home directory
+0.469   -N, --no-user-group           do not create a group with the same name as
+0.469                                 the user
+0.469   -o, --non-unique              allow to create users with duplicate
+0.469                                 (non-unique) UID
+0.469   -p, --password PASSWORD       encrypted password of the new account
+0.469   -r, --system                  create a system account
+0.469   -R, --root CHROOT_DIR         directory to chroot into
+0.469   -P, --prefix PREFIX_DIR       prefix directory where are located the /etc/* files
+0.469   -s, --shell SHELL             login shell of the new account
+0.469   -u, --uid UID                 user ID of the new account
+0.469   -U, --user-group              create a group with the same name as the user
+0.469   -Z, --selinux-user SEUSER     use a specific SEUSER for the SELinux user mapping
+0.469       --selinux-range SERANGE   use a specific MLS range for the SELinux user mapping
+0.469 
+------
+Dockerfile:3
+--------------------
+   1 |     FROM nginx
+   2 |     
+   3 | >>> RUN useradd -D appuser
+   4 |     
+   5 |     USER appuser
+--------------------
+ERROR: failed to solve: process "/bin/sh -c useradd -D appuser" did not complete successfully: exit code: 2
+
+admin@docker-host ✖ vim Dockerfile
+
+admin@docker-host ➜  docker build -t nonroot_image_nginx .
+[+] Building 0.6s (6/6) FINISHED                                                                                                 docker:default
+ => [internal] load build definition from Dockerfile                                                                                       0.0s
+ => => transferring dockerfile: 95B                                                                                                        0.0s
+ => [internal] load metadata for docker.io/library/nginx:latest                                                                            0.0s
+ => [internal] load .dockerignore                                                                                                          0.0s
+ => => transferring context: 2B                                                                                                            0.0s
+ => CACHED [1/2] FROM docker.io/library/nginx:latest                                                                                       0.0s
+ => [2/2] RUN useradd -r -u 1001 appuser                                                                                                   0.5s
+ => exporting to image                                                                                                                     0.0s
+ => => exporting layers                                                                                                                    0.0s
+ => => writing image sha256:774521fd755e29f0744f3d07b91a7a79d78ed2f3c918bbbec2ec2b68af047f74                                               0.0s
+ => => naming to docker.io/library/nonroot_image_nginx                                                                                     0.0s
+
+admin@docker-host ➜  
+
+admin@docker-host ➜  docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+admin@docker-host ➜  docker images
+REPOSITORY            TAG       IMAGE ID       CREATED         SIZE
+nonroot_image_nginx   latest    774521fd755e   7 seconds ago   161MB
+nginx                 latest    2e97da2b9cb3   46 hours ago    161MB
+
+admin@docker-host ➜  docker run --rm nonroot_image_nginx whoami
+appuser
+
+admin@docker-host ➜  cat Dockerfile 
+FROM nginx
+
+RUN useradd -r -u 1001 appuser
+
+USER appuser
+
+
+admin@docker-host ➜  
+-------------------------------------------------------
+
+✔ Reduced privilege
+✔ Smaller blast radius
