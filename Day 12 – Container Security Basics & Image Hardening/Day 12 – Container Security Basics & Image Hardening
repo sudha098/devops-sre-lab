@@ -1,0 +1,8 @@
+Answer (write this down):
+
+Containers share the host kernel
+Running as root increases blast radius
+Large images increase attack surface
+Vulnerable dependencies are common
+
+👉 Security is about reducing blast radius, not perfection.
