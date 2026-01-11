@@ -1,0 +1,26 @@
+
+admin@docker-host ➜  docker run --rm nginx whoami
+Unable to find image 'nginx:latest' locally
+latest: Pulling from library/nginx
+02d7611c4eae: Pull complete 
+589066960983: Pull complete 
+7674eff4effe: Pull complete 
+2e964620d7d0: Pull complete 
+24ca5634560a: Pull complete 
+f7f0a5b0f147: Pull complete 
+964234ddf75f: Pull complete 
+Digest: sha256:7272239bd21472f311aa3e86a85fdca0f1ad648995f983ab6e5e7dea665cd233
+Status: Downloaded newer image for nginx:latest
+root
+
+admin@docker-host ➜  
+
+admin@docker-host ➜  docker run --rm nginx whoami
+root
+
+admin@docker-host ➜  
+
+----------------------------------
+
+👉 Most images run as root by default (bad for security).
+
