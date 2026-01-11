@@ -1,0 +1,21 @@
+admin@docker-host ➜  docker images
+REPOSITORY            TAG       IMAGE ID       CREATED         SIZE
+nonroot_image_nginx   latest    774521fd755e   3 minutes ago   161MB
+nginx                 latest    2e97da2b9cb3   46 hours ago    161MB
+nginx                 alpine    b9d44994d8ad   46 hours ago    61.9MB
+busybox               latest    08ef35a1c3f0   15 months ago   4.43MB
+
+admin@docker-host ➜  
+
+admin@docker-host ➜  
+
+
+-------------------------------
+
+Observe:
+
+nginx
+busybox
+Any large image
+
+👉 Bigger image = more packages = more CVEs
