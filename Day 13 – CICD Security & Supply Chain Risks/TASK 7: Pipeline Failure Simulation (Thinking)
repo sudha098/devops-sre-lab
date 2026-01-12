@@ -1,0 +1,13 @@
+Scenario:
+
+Pipeline passes
+Image deployed
+App compromised later
+
+Ask:
+
+Was security tested?
+Were dependencies trusted?
+Was scanning enforced or optional?
+
+This builds post-incident thinking.
