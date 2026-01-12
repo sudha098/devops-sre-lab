@@ -1,0 +1,7 @@
+Think through:
+
+Does the pipeline need admin access?
+Does it need cluster-wide access?
+Should build jobs access prod secrets?
+
+Write 3 ways to reduce pipeline permissions.
