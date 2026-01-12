@@ -1,0 +1,8 @@
+List checks you would add to a pipeline:
+
+Secret scanning
+Dependency scanning
+Image scanning
+Policy validation
+
+No YAML needed — just understanding.
