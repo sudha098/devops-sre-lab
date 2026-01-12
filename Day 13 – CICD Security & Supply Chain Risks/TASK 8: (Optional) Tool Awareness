@@ -1,0 +1,8 @@
+Be able to explain at a high level:
+
+Trivy (image scanning)
+Snyk (dependency scanning)
+GitHub secret scanning
+SBOM (what it is, why it matters)
+
+No installs required.
