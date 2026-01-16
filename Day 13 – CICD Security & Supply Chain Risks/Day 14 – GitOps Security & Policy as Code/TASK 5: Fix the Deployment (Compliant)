@@ -1,0 +1,31 @@
+data:
+  name: good-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: good-app
+  template:
+    metadata:
+      labels:
+        app: good-app
+    spec:
+      containers:
+      - name: app
+        image: nginx
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+EOF
+
+controlplane ~ ➜  ls
+bad-deploy.yaml  good-deploy.yaml  LICENSE  README.md  require-limits.yaml
+
+controlplane ~ ➜  k apply -f good-deploy.yaml 
+deployment.apps/good-app created
+
+controlplane ~ ➜  
+---------------------------------
+
+✅ Policy allows compliant workloads
