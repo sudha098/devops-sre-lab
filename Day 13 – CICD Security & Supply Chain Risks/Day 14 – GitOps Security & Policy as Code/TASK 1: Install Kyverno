@@ -1,0 +1,112 @@
+controlplane ~ ➜  kubectl create -f https://raw.githubusercontent.com/kyverno/kyverno/main/config/install.yaml
+error: unable to read URL "https://raw.githubusercontent.com/kyverno/kyverno/main/config/install.yaml", server reported 404 Not Found, status code=404
+
+controlplane ~ ✖ kubectl create -f https://github.com/kyverno/kyverno/releases/latest/download/install.yaml
+namespace/kyverno created
+serviceaccount/kyverno-admission-controller created
+serviceaccount/kyverno-background-controller created
+serviceaccount/kyverno-cleanup-controller created
+serviceaccount/kyverno-reports-controller created
+configmap/kyverno created
+configmap/kyverno-metrics created
+Warning: unrecognized format "int64"
+customresourcedefinition.apiextensions.k8s.io/cleanuppolicies.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/clustercleanuppolicies.kyverno.io created
+Warning: unrecognized format "int32"
+customresourcedefinition.apiextensions.k8s.io/clusterpolicies.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/globalcontextentries.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/policies.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/policyexceptions.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/updaterequests.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/deletingpolicies.policies.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/generatingpolicies.policies.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/imagevalidatingpolicies.policies.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/mutatingpolicies.policies.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/namespaceddeletingpolicies.policies.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/namespacedimagevalidatingpolicies.policies.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/namespacedvalidatingpolicies.policies.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/policyexceptions.policies.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/validatingpolicies.policies.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/clusterephemeralreports.reports.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/ephemeralreports.reports.kyverno.io created
+customresourcedefinition.apiextensions.k8s.io/clusterpolicyreports.wgpolicyk8s.io created
+customresourcedefinition.apiextensions.k8s.io/policyreports.wgpolicyk8s.io created
+clusterrole.rbac.authorization.k8s.io/kyverno:admission-controller created
+clusterrole.rbac.authorization.k8s.io/kyverno:admission-controller:core created
+clusterrole.rbac.authorization.k8s.io/kyverno:background-controller created
+clusterrole.rbac.authorization.k8s.io/kyverno:background-controller:core created
+clusterrole.rbac.authorization.k8s.io/kyverno:cleanup-controller created
+clusterrole.rbac.authorization.k8s.io/kyverno:cleanup-controller:core created
+clusterrole.rbac.authorization.k8s.io/kyverno:rbac:admin:policies created
+clusterrole.rbac.authorization.k8s.io/kyverno:rbac:view:policies created
+clusterrole.rbac.authorization.k8s.io/kyverno:rbac:admin:policyreports created
+clusterrole.rbac.authorization.k8s.io/kyverno:rbac:view:policyreports created
+clusterrole.rbac.authorization.k8s.io/kyverno:rbac:admin:reports created
+clusterrole.rbac.authorization.k8s.io/kyverno:rbac:view:reports created
+clusterrole.rbac.authorization.k8s.io/kyverno:rbac:admin:updaterequests created
+clusterrole.rbac.authorization.k8s.io/kyverno:rbac:view:updaterequests created
+clusterrole.rbac.authorization.k8s.io/kyverno:reports-controller created
+clusterrole.rbac.authorization.k8s.io/kyverno:reports-controller:core created
+clusterrolebinding.rbac.authorization.k8s.io/kyverno:admission-controller created
+clusterrolebinding.rbac.authorization.k8s.io/kyverno:admission-controller:view created
+clusterrolebinding.rbac.authorization.k8s.io/kyverno:background-controller created
+clusterrolebinding.rbac.authorization.k8s.io/kyverno:background-controller:view created
+clusterrolebinding.rbac.authorization.k8s.io/kyverno:cleanup-controller created
+clusterrolebinding.rbac.authorization.k8s.io/kyverno:reports-controller created
+clusterrolebinding.rbac.authorization.k8s.io/kyverno:reports-controller:view created
+role.rbac.authorization.k8s.io/kyverno:admission-controller created
+role.rbac.authorization.k8s.io/kyverno:background-controller created
+role.rbac.authorization.k8s.io/kyverno:cleanup-controller created
+role.rbac.authorization.k8s.io/kyverno:reports-controller created
+rolebinding.rbac.authorization.k8s.io/kyverno:admission-controller created
+rolebinding.rbac.authorization.k8s.io/kyverno:background-controller created
+rolebinding.rbac.authorization.k8s.io/kyverno:cleanup-controller created
+rolebinding.rbac.authorization.k8s.io/kyverno:reports-controller created
+service/kyverno-svc created
+service/kyverno-svc-metrics created
+service/kyverno-background-controller-metrics created
+service/kyverno-cleanup-controller created
+service/kyverno-cleanup-controller-metrics created
+service/kyverno-reports-controller-metrics created
+deployment.apps/kyverno-admission-controller created
+deployment.apps/kyverno-background-controller created
+deployment.apps/kyverno-cleanup-controller created
+deployment.apps/kyverno-reports-controller created
+
+controlplane ~ ➜  k get all
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   172.20.0.1   <none>        443/TCP   30m
+
+controlplane ~ ➜  k get all -n kyverno kyverno-
+error: you must specify only one resource
+
+controlplane ~ ✖ k get all -n kyverno
+NAME                                                READY   STATUS    RESTARTS   AGE
+pod/kyverno-admission-controller-c8dcf6c99-c8sps    1/1     Running   0          32s
+pod/kyverno-background-controller-9dcd9f6bd-6rzfz   1/1     Running   0          32s
+pod/kyverno-cleanup-controller-578c5cdd6f-sqlbn     1/1     Running   0          32s
+pod/kyverno-reports-controller-67d98dc48c-l9rwj     1/1     Running   0          31s
+
+NAME                                            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/kyverno-background-controller-metrics   ClusterIP   172.20.27.27     <none>        8000/TCP   33s
+service/kyverno-cleanup-controller              ClusterIP   172.20.154.33    <none>        443/TCP    33s
+service/kyverno-cleanup-controller-metrics      ClusterIP   172.20.255.110   <none>        8000/TCP   33s
+service/kyverno-reports-controller-metrics      ClusterIP   172.20.75.169    <none>        8000/TCP   33s
+service/kyverno-svc                             ClusterIP   172.20.43.216    <none>        443/TCP    34s
+service/kyverno-svc-metrics                     ClusterIP   172.20.224.4     <none>        8000/TCP   34s
+
+NAME                                            READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/kyverno-admission-controller    1/1     1            1           32s
+deployment.apps/kyverno-background-controller   1/1     1            1           32s
+deployment.apps/kyverno-cleanup-controller      1/1     1            1           32s
+deployment.apps/kyverno-reports-controller      1/1     1            1           32s
+
+NAME                                                      DESIRED   CURRENT   READY   AGE
+replicaset.apps/kyverno-admission-controller-c8dcf6c99    1         1         1       32s
+replicaset.apps/kyverno-background-controller-9dcd9f6bd   1         1         1       32s
+replicaset.apps/kyverno-cleanup-controller-578c5cdd6f     1         1         1       32s
+replicaset.apps/kyverno-reports-controller-67d98dc48c     1         1         1       32s
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  
