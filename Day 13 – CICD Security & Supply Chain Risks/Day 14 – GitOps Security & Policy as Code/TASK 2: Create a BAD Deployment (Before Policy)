@@ -1,0 +1,38 @@
+controlplane ~ ➜  cat <<EOF > bad-deploy.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bad-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bad-app
+  template:
+    metadata:
+      labels:
+        app: bad-app
+    spec:
+      containers:
+      - name: app
+        image: nginx
+EOF
+
+controlplane ~ ➜  k apply -f bad-deploy.yaml 
+deployment.apps/bad-app created
+
+controlplane ~ ➜  k get po 
+NAME                       READY   STATUS    RESTARTS   AGE
+bad-app-749fc64b88-j9jqv   1/1     Running   0          7s
+
+controlplane ~ ➜  k get deploy
+NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+bad-app   1/1     1            1           15s
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  
+
+--------------------------------------------------
+
+👉 This is the problem — Kubernetes allows unsafe configs by default.
