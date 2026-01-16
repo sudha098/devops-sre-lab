@@ -1,0 +1,20 @@
+controlplane ~ ➜  k delete deployments.apps bad-app 
+deployment.apps "bad-app" deleted from default namespace
+
+controlplane ~ ➜  k apply -f bad-deploy.yaml 
+Error from server: error when creating "bad-deploy.yaml": admission webhook "validate.kyverno.svc-fail" denied the request: 
+
+resource Deployment/default/bad-app was blocked due to the following policies 
+
+require-resource-limits:
+  autogen-check-limits: 'validation error: CPU and Memory limits are required. rule
+    autogen-check-limits failed at path /spec/template/spec/containers/0/resources/limits/'
+
+controlplane ~ ✖ 
+
+---------------------------------------
+
+🎯 POLICY WORKED
+🎯 BAD DEPLOYMENT BLOCKED
+
+This is GitOps + Policy as Code in action.
