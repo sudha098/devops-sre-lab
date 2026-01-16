@@ -1,0 +1,50 @@
+controlplane ~ ➜  vim require-limits.yaml
+
+controlplane ~ ➜  k apply -f require-limits.yaml 
+Error from server (BadRequest): error when creating "require-limits.yaml": ClusterPolicy in version "v1" cannot be handled as a ClusterPolicy: strict decoding error: unknown field "spec.rules[0].match.resources.kind"
+
+controlplane ~ ✖ vim require-limits.yaml
+
+controlplane ~ ➜  k apply -f require-limits.yaml 
+clusterpolicy.kyverno.io/require-resource-limits created
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  k get clusterpolic
+error: the server doesn't have a resource type "clusterpolic"
+
+controlplane ~ ✖ k get clusterpolicyreports.wgpolicyk8s.io 
+No resources found
+
+controlplane ~ ➜  k get clusterpolicy
+NAME                      ADMISSION   BACKGROUND   READY   AGE   MESSAGE
+require-resource-limits   true        true         True    32s   Ready
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  cat require-limits.yaml 
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-resource-limits
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: check-limits
+      match:
+        resources:
+          kinds:
+            - Pod
+      validate:
+        message: "CPU and Memory limits are required."
+        pattern: 
+          spec:
+            containers:
+              - resources:
+                  limits:
+                    cpu: "?*"
+                    memory: "?*"
+
+
+
+controlplane ~ ➜  
