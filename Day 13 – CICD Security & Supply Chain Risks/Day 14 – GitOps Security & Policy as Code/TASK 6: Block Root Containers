@@ -1,0 +1,45 @@
+controlplane ~ ➜  cat <<EOF > block-root.yaml
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: block-root-user
+spec:
+  validationFailureAction: Enforce
+  rules:
+  - name: require-non-root
+    match:
+      resources:
+        kinds:
+        - Pod
+    validate:
+      message: "Containers must run as non-root"
+      pattern:
+        spec:
+          securityContext:
+            runAsNonRoot: true
+EOF
+
+controlplane ~ ➜  k delete deployments.apps good-app 
+deployment.apps "good-app" deleted from default namespace
+
+controlplane ~ ➜  k apply -f good-deploy.yaml 
+deployment.apps/good-app created
+
+controlplane ~ ➜  k apply -f block-root.yaml 
+clusterpolicy.kyverno.io/block-root-user created
+
+controlplane ~ ➜  k delete deployments.apps good-app 
+deployment.apps "good-app" deleted from default namespace
+
+controlplane ~ ➜  k apply -f good-deploy.yaml 
+Error from server: error when creating "good-deploy.yaml": admission webhook "validate.kyverno.svc-fail" denied the request: 
+
+resource Deployment/default/good-app was blocked due to the following policies 
+
+block-root-user:
+  autogen-require-non-root: 'validation error: Containers must run as non-root. rule
+    autogen-require-non-root failed at path /spec/template/spec/securityContext/runAsNonRoot/'
+
+controlplane ~ ✖ 
+------------------------------------------------
+
