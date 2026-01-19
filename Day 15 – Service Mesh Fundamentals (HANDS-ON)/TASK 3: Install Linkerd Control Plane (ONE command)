@@ -1,0 +1,129 @@
+controlplane ~ ➜  linkerd install | kubectl apply -f -
+Linkerd CRDs must be installed first. Run linkerd install with the --crds flag.
+error: no objects passed to apply
+
+controlplane ~ ✖ linkerd install --crds | kubectl apply -f -
+The Gateway API CRDs must be installed prior to installing Linkerd. Run:
+
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
+
+or see https://gateway-api.sigs.k8s.io/guides/#installing-gateway-api for more options.
+error: no objects passed to apply
+
+controlplane ~ ✖ linkerd install | kubectl apply -f -
+Linkerd CRDs must be installed first. Run linkerd install with the --crds flag.
+error: no objects passed to apply
+
+controlplane ~ ✖ kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
+Warning: unrecognized format "int32"
+Warning: unrecognized format "int64"
+customresourcedefinition.apiextensions.k8s.io/backendtlspolicies.gateway.networking.k8s.io serverside-applied
+customresourcedefinition.apiextensions.k8s.io/gatewayclasses.gateway.networking.k8s.io serverside-applied
+customresourcedefinition.apiextensions.k8s.io/gateways.gateway.networking.k8s.io serverside-applied
+customresourcedefinition.apiextensions.k8s.io/grpcroutes.gateway.networking.k8s.io serverside-applied
+customresourcedefinition.apiextensions.k8s.io/httproutes.gateway.networking.k8s.io serverside-applied
+customresourcedefinition.apiextensions.k8s.io/referencegrants.gateway.networking.k8s.io serverside-applied
+
+controlplane ~ ➜  kubectl get crd | grep gateway
+backendtlspolicies.gateway.networking.k8s.io          2026-01-19T17:03:56Z
+gatewayclasses.gateway.networking.k8s.io              2026-01-19T17:03:56Z
+gateways.gateway.networking.k8s.io                    2026-01-19T17:03:56Z
+grpcroutes.gateway.networking.k8s.io                  2026-01-19T17:03:56Z
+httproutes.gateway.networking.k8s.io                  2026-01-19T17:03:57Z
+referencegrants.gateway.networking.k8s.io             2026-01-19T17:03:58Z
+
+controlplane ~ ➜  linkerd install --crds | kubectl apply -f -
+Rendering Linkerd CRDs...
+Next, run `linkerd install | kubectl apply -f -` to install the control plane.
+
+customresourcedefinition.apiextensions.k8s.io/authorizationpolicies.policy.linkerd.io created
+customresourcedefinition.apiextensions.k8s.io/egressnetworks.policy.linkerd.io created
+Warning: unrecognized format "int64"
+customresourcedefinition.apiextensions.k8s.io/httplocalratelimitpolicies.policy.linkerd.io created
+Warning: unrecognized format "int32"
+customresourcedefinition.apiextensions.k8s.io/httproutes.policy.linkerd.io created
+customresourcedefinition.apiextensions.k8s.io/meshtlsauthentications.policy.linkerd.io created
+customresourcedefinition.apiextensions.k8s.io/networkauthentications.policy.linkerd.io created
+customresourcedefinition.apiextensions.k8s.io/serverauthorizations.policy.linkerd.io created
+customresourcedefinition.apiextensions.k8s.io/servers.policy.linkerd.io created
+Warning: unrecognized format "float"
+customresourcedefinition.apiextensions.k8s.io/serviceprofiles.linkerd.io created
+customresourcedefinition.apiextensions.k8s.io/externalworkloads.workload.linkerd.io created
+
+controlplane ~ ➜  linkerd install | kubectl apply -f -
+namespace/linkerd created
+clusterrole.rbac.authorization.k8s.io/linkerd-linkerd-identity created
+clusterrolebinding.rbac.authorization.k8s.io/linkerd-linkerd-identity created
+serviceaccount/linkerd-identity created
+clusterrole.rbac.authorization.k8s.io/linkerd-linkerd-destination created
+clusterrolebinding.rbac.authorization.k8s.io/linkerd-linkerd-destination created
+serviceaccount/linkerd-destination created
+secret/linkerd-sp-validator-k8s-tls created
+validatingwebhookconfiguration.admissionregistration.k8s.io/linkerd-sp-validator-webhook-config created
+secret/linkerd-policy-validator-k8s-tls created
+validatingwebhookconfiguration.admissionregistration.k8s.io/linkerd-policy-validator-webhook-config created
+clusterrole.rbac.authorization.k8s.io/linkerd-policy created
+clusterrolebinding.rbac.authorization.k8s.io/linkerd-destination-policy created
+role.rbac.authorization.k8s.io/remote-discovery created
+rolebinding.rbac.authorization.k8s.io/linkerd-destination-remote-discovery created
+role.rbac.authorization.k8s.io/linkerd-heartbeat created
+rolebinding.rbac.authorization.k8s.io/linkerd-heartbeat created
+clusterrole.rbac.authorization.k8s.io/linkerd-heartbeat created
+clusterrolebinding.rbac.authorization.k8s.io/linkerd-heartbeat created
+serviceaccount/linkerd-heartbeat created
+clusterrole.rbac.authorization.k8s.io/linkerd-linkerd-proxy-injector created
+clusterrolebinding.rbac.authorization.k8s.io/linkerd-linkerd-proxy-injector created
+serviceaccount/linkerd-proxy-injector created
+secret/linkerd-proxy-injector-k8s-tls created
+mutatingwebhookconfiguration.admissionregistration.k8s.io/linkerd-proxy-injector-webhook-config created
+configmap/linkerd-config created
+role.rbac.authorization.k8s.io/ext-namespace-metadata-linkerd-config created
+secret/linkerd-identity-issuer created
+configmap/linkerd-identity-trust-roots created
+service/linkerd-identity created
+Warning: spec.SessionAffinity is ignored for headless services
+service/linkerd-identity-headless created
+deployment.apps/linkerd-identity created
+service/linkerd-dst created
+service/linkerd-dst-headless created
+service/linkerd-sp-validator created
+service/linkerd-policy created
+service/linkerd-policy-validator created
+deployment.apps/linkerd-destination created
+cronjob.batch/linkerd-heartbeat created
+deployment.apps/linkerd-proxy-injector created
+service/linkerd-proxy-injector created
+secret/linkerd-config-overrides created
+
+controlplane ~ ➜  linkerd check
+kubernetes-api
+--------------
+√ can initialize the client
+√ can query the Kubernetes API
+
+kubernetes-version
+------------------
+√ is running the minimum Kubernetes API version
+
+linkerd-existence
+-----------------
+√ 'linkerd-config' config map exists
+√ heartbeat ServiceAccount exist
+√ control plane replica sets are ready
+√ no unschedulable pods
+
+^C
+
+controlplane ~ ✖ k get po -n linkerd 
+NAME                                     READY   STATUS    RESTARTS   AGE
+linkerd-destination-76875d4db5-c47cg     4/4     Running   0          61s
+linkerd-identity-66cf7b695f-lnrc7        2/2     Running   0          61s
+linkerd-proxy-injector-85dffbd6b-gz2tm   2/2     Running   0          60s
+
+controlplane ~ ➜  
+
+controlplane ~ ➜  
+
+-----------------------------------------------
+
+🎯 Mesh control plane is live.
