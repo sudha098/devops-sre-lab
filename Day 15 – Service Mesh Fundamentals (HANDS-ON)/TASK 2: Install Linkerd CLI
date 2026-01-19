@@ -1,0 +1,79 @@
+controlplane ~ ➜  curl -fsL https://run.linkerd.io/install | sh
+Downloading linkerd2-cli-edge-26.1.2-linux-amd64...
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 76.7M  100 76.7M    0     0  48.5M      0  0:00:01  0:00:01 --:--:--  117M
+Download complete!
+
+Linkerd edge-26.1.2 was successfully installed 🎉
+
+
+*******************************************
+* This script is deprecated and no longer *
+* installs stable releases.               *
+*                                         *
+* The latest edge release has been        *
+* installed. In the future, please use    *
+*   run.linkerd.io/install-edge           *
+* for this behavior.                      *
+*                                         *
+* For stable releases, please see         *
+*  https://linkerd.io/releases/           *
+*******************************************
+
+Add the linkerd CLI to your path with:
+
+  export PATH=$PATH:/root/.linkerd2/bin
+
+Now run:
+
+  # install the GatewayAPI CRDs
+  kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
+
+  linkerd check --pre                         # validate that Linkerd can be installed
+  linkerd install --crds | kubectl apply -f - # install the Linkerd CRDs
+  linkerd install | kubectl apply -f -        # install the control plane into the 'linkerd' namespace
+  linkerd check                               # validate everything worked!
+
+You can also obtain observability features by installing the viz extension:
+
+  linkerd viz install | kubectl apply -f -  # install the viz extension into the 'linkerd-viz' namespace
+  linkerd viz check                         # validate the extension works!
+  linkerd viz dashboard                     # launch the dashboard
+
+Looking for more? Visit https://linkerd.io/2/tasks
+
+
+controlplane ~ ➜  export PATH=$PATH:$HOME/.linkerd2/bin
+
+controlplane ~ ➜  ls
+LICENSE  README.md
+
+controlplane ~ ➜  ls -la
+total 88
+drwx------ 1 root root  4096 Jan 19 16:58 .
+dr-xr-xr-x 1 root root  4096 Jan 19 16:59 ..
+-rw-r--r-- 1 root root  2325 Jan 19 16:54 .bash_profile
+-rw-r--r-- 1 root root  3265 Dec 11 08:24 .bashrc
+drwxr-xr-x 1 root root  4096 Jan 19 16:54 .cache
+drwxr-xr-x 1 root root  4096 Jan 19 16:54 .config
+drwxr-xr-x 3 root root  4096 Jan 19 15:07 .kube
+-rw-r--r-- 1 1001  118 11358 Jun  4  2025 LICENSE
+drwxr-xr-x 3 root root  4096 Jan 19 16:58 .linkerd2
+-rw-r--r-- 1 root root   161 Jul  9  2019 .profile
+-rw-r--r-- 1 1001  118 10934 Jun  4  2025 README.md
+drwx------ 2 root root  4096 Jan 19 16:54 .ssh
+drwx------ 2 root root  4096 Jan 19 16:54 .terminal_logs
+drwxr-xr-x 1 root root  4096 Jul 18  2025 .vim
+-rw-r--r-- 1 root root   132 Jul 18  2025 .vimrc
+-rw-r--r-- 1 root root   165 Jul 18  2025 .wget-hsts
+
+controlplane ~ ➜  linked version
+-bash: linked: command not found
+
+controlplane ~ ✖ linkerd version
+Client version: edge-26.1.2
+Server version: unavailable
+
+controlplane ~ ➜  
