@@ -1,0 +1,9 @@
+Write in notes:
+
+Without Mesh	           With Mesh
+Plain TCP	               mTLS
+No visibility	           Built-in metrics
+App handles retries	     Proxy handles retries
+Hard to debug	           Observability by default
+
+This comparison is interview gold.
