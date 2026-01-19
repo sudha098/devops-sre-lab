@@ -1,0 +1,45 @@
+controlplane ~ ✖ linkerd tap deploy/web
+Command "tap" is deprecated, use instead 'linkerd viz tap [flags] (RESOURCE)'
+
+req id=0:0 proxy=in  src=172.17.2.7:40648 dst=172.17.1.8:80 tls=no_tls_from_remote :method=GET :authority=web-svc :path=/
+rsp id=0:0 proxy=in  src=172.17.2.7:40648 dst=172.17.1.8:80 tls=no_tls_from_remote :status=200 latency=521µs
+end id=0:0 proxy=in  src=172.17.2.7:40648 dst=172.17.1.8:80 tls=no_tls_from_remote duration=44µs response-length=0B
+
+------------------------------
+
+You’ll see live traffic with:
+Source
+Destination
+TLS enforced automatically
+
+👉 Mesh provides zero-trust networking by default
+
+
+controlplane ~ ✖ k run curls --image curlimages/curl -it --rm -- sh
+All commands and output from this session will be recorded in container logs, including credentials and sensitive information passed through the command prompt.
+If you don't see a command prompt, try pressing enter.
+~ $ curl web-svc
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+~ $ 
