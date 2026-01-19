@@ -1,0 +1,22 @@
+controlplane ~ ➜  k create deploy web --image nginx
+deployment.apps/web created
+
+controlplane ~ ➜  k expose deployment web --name=web-svc --port 80
+service/web-svc exposed
+
+controlplane ~ ➜  k get svc web-svc 
+NAME      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+web-svc   ClusterIP   172.20.21.203   <none>        80/TCP    8s
+
+controlplane ~ ➜  
+
+
+------------------------------------------
+
+You now have:
+
+Pod
+Service
+NO mesh
+NO mTLS
+NO traffic visibility
