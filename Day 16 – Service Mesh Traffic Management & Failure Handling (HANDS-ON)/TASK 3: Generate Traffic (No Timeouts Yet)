@@ -1,0 +1,21 @@
+controlplane ~ ➜  kubectl run client --image=curlimages/curl -it --rm -- sh
+All commands and output from this session will be recorded in container logs, including credentials and sensitive information passed through the command prompt.
+If you don't see a command prompt, try pressing enter.
+~ $ time curl slow-app
+curl: (6) Could not resolve host: slow-app
+Command exited with non-zero status 6
+real    0m 0.86s
+user    0m 0.00s
+sys     0m 0.00s
+~ $ exit
+Session ended, resume using 'kubectl attach client -c client -i -t' command when the pod is running
+pod "client" deleted from default namespace
+
+
+---------------------------------------
+
+Observe:
+
+Request takes ~2 seconds
+Client waits patiently
+No failures yet
