@@ -1,0 +1,7 @@
+kubectl run client --image=curlimages/curl -it --rm -- sh
+curl slow-app-svc
+exit
+
+Expected:
+
+curl: (28) Operation timed out
