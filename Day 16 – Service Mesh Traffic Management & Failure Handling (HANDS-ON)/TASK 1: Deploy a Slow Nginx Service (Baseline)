@@ -1,0 +1,18 @@
+controlplane ~ ➜  cat <<EOF > nginx-slow.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf
+data:
+  default.conf: |
+    server {
+      listen 80;
+      location / {
+        sleep 2;
+        return 200 "OK\n";
+      }
+    }
+EOF
+
+controlplane ~ ➜  k apply -f nginx-slow.yaml 
+configmap/nginx-conf created
