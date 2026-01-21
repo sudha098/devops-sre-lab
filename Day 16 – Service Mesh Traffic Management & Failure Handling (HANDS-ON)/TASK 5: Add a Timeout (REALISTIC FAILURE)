@@ -1,0 +1,14 @@
+controlplane ~ ➜  cat <<EOF > timeout.yaml
+apiVersion: policy.linkerd.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: slow-timeout
+spec:
+  parentRefs:
+  - name: slow-app
+    kind: Service
+  rules:
+  - timeouts:
+      request: 500ms
+EOF
+controlplane ~ ✖ kubectl apply -f timeout.yaml
