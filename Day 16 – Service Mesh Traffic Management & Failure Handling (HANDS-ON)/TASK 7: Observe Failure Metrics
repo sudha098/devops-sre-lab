@@ -1,0 +1,9 @@
+linkerd stat deploy/slow-app
+
+Observe:
+
+Success rate drops
+Latency capped
+Requests fail fast
+
+👉 Timeouts protect clients
