@@ -1,0 +1,14 @@
+
+controlplane ~ ➜  linkerd viz stat deploy/slow-app
+NAME       MESHED   SUCCESS      RPS   LATENCY_P50   LATENCY_P95   LATENCY_P99   TCP_CONN
+slow-app      1/1   100.00%   0.3rps           1ms           1ms           1ms          1
+
+controlplane ~ ➜ 
+--------------------------------
+
+Observe:
+
+Success rate ~100%
+Latency ~2s
+
+👉 Mesh shows latency clearly
