@@ -1,0 +1,13 @@
+Generate load again.
+
+Check:
+linkerd stat deploy/slow-app
+
+
+Observe:
+
+More requests hitting backend
+Higher load
+Still failing
+
+👉 Retries amplified traffic to a slow service
