@@ -1,0 +1,19 @@
+cat <<EOF > retry.yaml
+apiVersion: policy.linkerd.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: slow-retry
+spec:
+  parentRefs:
+  - name: slow-app-svc
+    kind: Service
+  rules:
+  - timeouts:
+      request: 500ms
+    retries:
+      attempts: 3
+      backoff:
+        duration: 200ms
+EOF
+
+kubectl apply -f retry.yaml
